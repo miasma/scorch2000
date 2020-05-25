@@ -15,7 +15,7 @@
 package ScorchServer;
 
 import java.util.*;
-import Scorch.Protocol;
+import scorch.Protocol;
 
 public class Game
 {

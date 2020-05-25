@@ -11,7 +11,7 @@
 
 package ScorchServer;
 
-import Scorch.PlayerProfile;
+import scorch.PlayerProfile;
 import java.util.Vector;
 
 abstract public class Player

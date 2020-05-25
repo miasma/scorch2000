@@ -22,8 +22,8 @@ package ScorchServer;
 import java.net.*;
 import java.util.Vector;
 import java.io.IOException;
-import Scorch.PlayerProfile;
-import Scorch.Protocol;
+import scorch.PlayerProfile;
+import scorch.Protocol;
 import ScorchServer.ServerShell.*;
 
 public class ScorchServer

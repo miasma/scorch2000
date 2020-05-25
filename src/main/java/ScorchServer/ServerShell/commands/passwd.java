@@ -7,7 +7,7 @@ package ScorchServer.ServerShell.commands;
 import java.util.Vector;
 import ScorchServer.*;
 import ScorchServer.ServerShell.ServerShell;
-import Scorch.*;
+import scorch.*;
 
 public class passwd extends shellCommand
 {

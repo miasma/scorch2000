@@ -12,8 +12,8 @@
 
 package ScorchServer;
 
-import Scorch.PlayerProfile;
-import Scorch.Protocol;
+import scorch.PlayerProfile;
+import scorch.Protocol;
 
 public class AIPlayer extends Player
 {

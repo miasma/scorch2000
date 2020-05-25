@@ -20,7 +20,7 @@ import scorch.items.*;
 import scorch.gui.*;
 import swindows.*;
 
-public final class ScorchApplet extends Applet implements FocusListener
+public class ScorchApplet extends Applet implements FocusListener
 {
     public static String Version = "v1.061, 4/11/2001";
 

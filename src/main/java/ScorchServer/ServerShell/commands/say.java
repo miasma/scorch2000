@@ -6,7 +6,7 @@ package ScorchServer.ServerShell.commands;
 import java.util.Vector;
 import ScorchServer.*;
 import ScorchServer.ServerShell.ServerShell;
-import Scorch.Protocol;
+import scorch.Protocol;
 
 public class say extends shellCommand
 {

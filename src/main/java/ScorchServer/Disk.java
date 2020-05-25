@@ -13,8 +13,7 @@ package ScorchServer;
 import java.io.*;
 import java.util.*;
 
-import Scorch.*;
-import Scorch.Utility.Crypt;
+import scorch.*;
 
 public class Disk implements Runnable
 {

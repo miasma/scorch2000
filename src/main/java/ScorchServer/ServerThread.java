@@ -19,8 +19,8 @@ import java.net.*;
 import java.io.*;
 import java.util.*;
 
-import Scorch.PlayerProfile;
-import Scorch.Protocol;
+import scorch.PlayerProfile;
+import scorch.Protocol;
 
 public class ServerThread extends Player implements Runnable
 {

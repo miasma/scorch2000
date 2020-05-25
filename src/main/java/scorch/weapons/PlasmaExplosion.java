@@ -11,6 +11,7 @@ package scorch.weapons;
 import java.awt.*;
 
 import scorch.Bitmap;
+import scorch.ScorchColorModel;
 
 public class PlasmaExplosion extends RoundExplosion
 {
@@ -66,8 +67,8 @@ public class PlasmaExplosion extends RoundExplosion
 	
     public ExplosionInfo getExplosionInfo(){				
 	ExplosionInfo ie=new ExplosionInfo();
-	ie.center=new Point(x+radius, y+radius);
-	ie.radius=radius;
+	// FIXME ie.center=new Point(x+radius, y+radius);
+	// FIXME ie.radius=radius;
 	ie.explosionArea=new Rectangle(x,y,width, height);
 	return ie;		
     }
@@ -80,7 +81,7 @@ public class PlasmaExplosion extends RoundExplosion
     int counter=radius/10;
     int step=2;
 						
-    public boolean drawNextFrame(){
+    public boolean drawNextFrame(boolean update){
 	
 	frameNum++;
 	//	bitmap.setColor(b);

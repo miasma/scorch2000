@@ -12,6 +12,8 @@
 
 package scorch.utility;
 
+import scorch.PlayerProfile;
+
 public class Crypt
 {
    private Crypt() {}
@@ -638,6 +640,18 @@ public class Crypt
       return(buffer.toString());
    }
 
+   /*
+     encrypts the profile's password.  Takes first and last letter of the
+     user name as the salt (user name cannot be changed)
+   */
+   public static final PlayerProfile cryptProfile(PlayerProfile pl )
+   {
+      String salt = "" + pl.getName().charAt(0) +
+              pl.getName().charAt(pl.getName().length()-1);
+
+      pl.setPassword(crypt(salt, pl.getPassword()));
+      return pl;
+   }
     
     /*   public static void main(String args[])
    {

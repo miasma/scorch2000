@@ -9,9 +9,9 @@ public class HeavyDigger extends Weapon
 {
     public HeavyDigger()
     {
+		super(DiggerExplosion::new);
 	type = HeavyDigger;
 	price = 6000;
 	argument = DiggerExplosion.HEAVY_DIGGER;
-	explosionClass = "DiggerExplosion";
     }
 }

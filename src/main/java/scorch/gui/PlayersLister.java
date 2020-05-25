@@ -8,8 +8,8 @@ package scorch.gui;
   that contains the list of the players
 */
 
-public interface PlayersLister
-{
+public interface PlayersLister {
     void addPlayer(String name);
+
     void removePlayer(String name);
 }

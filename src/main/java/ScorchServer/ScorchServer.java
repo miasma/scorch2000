@@ -16,313 +16,271 @@
   that either assigns a client to existing game or makes a new one if 
   there are no spots available.
 */
-  
+
 package ScorchServer;
 
 import java.net.*;
 import java.util.Vector;
 import java.io.IOException;
+
 import scorch.PlayerProfile;
 import scorch.Protocol;
 import ScorchServer.ServerShell.*;
 
-public class ScorchServer
-{
-    public static final String 
-	version = "Scorched Earth 2000 Server, v1.271, 07/26/2000";
+public class ScorchServer {
+    public static final String
+            version = "Scorched Earth 2000 Server, v1.271, 07/26/2000";
 
     private ServerSocket s_socket = null;
     private final int port;
     private static int game_count = 0;
     public static int potentialDesyncCount = 0;
-    
+
     //all the games on the server
     private static final Vector<Game> games = new Vector<>();
     //responsible for profile storage and lookup
-    private static Disk disk = null;
+    private static final Disk disk = new Disk();
     private static final Vector<PlayerProfile> topTen = new Vector<>();
 
-    public static void main(String[] args)
-    {
-	disk = new Disk();
-	ScorchServer ss;
-	ServerShell shell;
+    public static void main(String[] args) {
 
-	System.out.println(version+"\n");
-	System.out.println
-	    ("Copyright (C) 1999-2000 KAOS Software\n"+
-	     "Scorched Earth 2000 comes with ABSOLUTELY NO WARRANTY;\nThis is"+
-	     " free software, and you are welcome to redistribute it\nunder"+
-	     " certain conditions. Please read COPYING for details.\n");
-	
-	try 
-	    {
-		//new Thread(new RemoteServerShell()).start();
-		if (args.length > 0)
-		    ss = new ScorchServer(Integer.parseInt(args[0]));
-		else
-		    ss = new ScorchServer(4242);
+        System.out.println(version + "\n");
+        System.out.println
+                ("Copyright (C) 1999-2000 KAOS Software\n" +
+                        "Scorched Earth 2000 comes with ABSOLUTELY NO WARRANTY;\nThis is" +
+                        " free software, and you are welcome to redistribute it\nunder" +
+                        " certain conditions. Please read COPYING for details.\n");
 
-		shell = new ServerShell( ss );
-		new Thread( shell ).start();
-		ss.runServer();
-	    }
-	catch (Throwable t)
-	    {
-		System.out.println("ERROR starting server: "+t);
-	    }
-	System.exit( 0 );
+        try {
+            ScorchServer ss;
+            ServerShell shell;
+            if (args.length > 0)
+                ss = new ScorchServer(Integer.parseInt(args[0]));
+            else
+                ss = new ScorchServer(4242);
+
+            shell = new ServerShell(ss);
+            new Thread(shell).start();
+            ss.runServer();
+        } catch (Throwable t) {
+            System.out.println("ERROR starting server: " + t);
+        }
+        System.exit(0);
     }
-    
-    public ScorchServer(int port)
-    {
-	this.port=port;
-	//runServer();
+
+    public ScorchServer(int port) {
+        this.port = port;
+        //runServer();
     }
- 
+
     //check if a player is allready participating in some game
-    public static synchronized boolean alreadyPlaying(String name)
-    {
-	Game g;
+    public static synchronized boolean alreadyPlaying(String name) {
+        Game g;
 
-	//see if the player is already logged into one of the games
-	for (int i = 0; i < games.size(); i++)
-	    {
-		g = games.elementAt(i);
-		if (g.alreadyPlaying(name))
-		    return true;
-	    }
-	return false;
+        //see if the player is already logged into one of the games
+        for (int i = 0; i < games.size(); i++) {
+            g = games.elementAt(i);
+            if (g.alreadyPlaying(name))
+                return true;
+        }
+        return false;
     }
 
     //lookup a player in the profile hashtable
-    public static synchronized PlayerProfile lookupPlayer(String name)
-    {
-	return disk.getProfile(name);
+    public static synchronized PlayerProfile lookupPlayer(String name) {
+        return disk.getProfile(name);
     }
-    
+
     //write the hashtable to disk
     //    public static synchronized void writeTable()
     //{
     //	disk.writeTable();
     //}
-    
+
     //makes a new player in the profile database. 
-    public static synchronized void newPlayer(PlayerProfile profile)
-    {
-	disk.add(profile);
-	//writeTable();
+    public static synchronized void newPlayer(PlayerProfile profile) {
+        disk.add(profile);
+        //writeTable();
     }
-    
+
     //change user's profile (as requested by the user)
-    public static synchronized void changeProfile(PlayerProfile profile)
-    {
-	//System.out.println("CHANGING " + profile);
-	disk.change(profile);
-	//System.out.println("RESULT " + lookupPlayer(profile.getName()));
-	//writeTable();
+    public static synchronized void changeProfile(PlayerProfile profile) {
+        //System.out.println("CHANGING " + profile);
+        disk.change(profile);
+        //System.out.println("RESULT " + lookupPlayer(profile.getName()));
+        //writeTable();
     }
-    
+
     //removes the user profile
-    public static synchronized void deleteProfile(PlayerProfile profile)
-    {
-    
+    public static synchronized void deleteProfile(PlayerProfile profile) {
+
     }
 
-    public static String allGamesToString()
-    {
-	StringBuilder all = new StringBuilder();
-	Game g;
-	int multi_player = 0;
-	
-	for (int i = 0; i < games.size(); i++)
-	    {
-		g = games.elementAt(i);
-		if (g.getHumanCount() > 1)  multi_player++;
-		all.append(g).append("\n");
-	    }
-	
-	all.append("Total of ").append(games.size()).append(" games, ").append(multi_player).append(" multiplayer.\n\n");
+    public static String allGamesToString() {
+        StringBuilder all = new StringBuilder();
+        Game g;
+        int multi_player = 0;
 
-	return all.toString();
+        for (int i = 0; i < games.size(); i++) {
+            g = games.elementAt(i);
+            if (g.getHumanCount() > 1) multi_player++;
+            all.append(g).append("\n");
+        }
+
+        all.append("Total of ").append(games.size()).append(" games, ").append(multi_player).append(" multiplayer.\n\n");
+
+        return all.toString();
     }
 
-    public static int getDesyncCount()
-    {
-	return Disk.getDesyncCount();
+    public static int getDesyncCount() {
+        return Disk.getDesyncCount();
     }
 
-    public static int getGameCount()
-    {
-	return game_count;
+    public static int getGameCount() {
+        return game_count;
     }
 
-    public static Game findGameByID(int index)
-    {
-	Game g;
+    public static Game findGameByID(int index) {
+        Game g;
 
-	for (int i = 0; i < games.size(); i++)
-	    {
-		g = games.elementAt(i);
-		if (g.getID() == index)
-		    return g;
-	    }
+        for (int i = 0; i < games.size(); i++) {
+            g = games.elementAt(i);
+            if (g.getID() == index)
+                return g;
+        }
 
-	return null;
+        return null;
     }
 
-    public static PlayerProfile findProfileByName( String name )
-    {
-	return disk.findProfileByName( name );
+    public static PlayerProfile findProfileByName(String name) {
+        return disk.findProfileByName(name);
     }
 
-    public static Player findPlayerByName( String name )
-    {
-	Player pl;
+    public static Player findPlayerByName(String name) {
+        Player pl;
 
-	for (int i = 0; i < games.size(); i++)
-	    {
-		pl = games.elementAt(i).findPlayerByName(name);
-		if (pl != null)
-		    return pl;
-	    }
+        for (int i = 0; i < games.size(); i++) {
+            pl = games.elementAt(i).findPlayerByName(name);
+            if (pl != null)
+                return pl;
+        }
 
-	return null;
+        return null;
     }
 
-    public static void insertTopTen(PlayerProfile profile)
-    {
-	int position = 0;
+    public static void insertTopTen(PlayerProfile profile) {
+        int position = 0;
 
-	//the profile is already in the top list
-	//	if (topTen.contains(profile))
-	//    return;
+        //the profile is already in the top list
+        //	if (topTen.contains(profile))
+        //    return;
 
-	for (int i = 0; i < topTen.size(); i++)
-	    if (profile.getName().equals
-		(topTen.elementAt(i).getName()))
-		topTen.removeElementAt(i);
+        for (int i = 0; i < topTen.size(); i++)
+            if (profile.getName().equals
+                    (topTen.elementAt(i).getName()))
+                topTen.removeElementAt(i);
 
         //can modify top ten to top 'any other number'
         int topX = 10;
-        while (position< topX && position < topTen.size())
-	    {
-		if (profile.getOverallGain() > 
-		    topTen.elementAt
-		     (position).getOverallGain())
-		    break;
-		
-		position++;
-	    }
+        while (position < topX && position < topTen.size()) {
+            if (profile.getOverallGain() >
+                    topTen.elementAt
+                            (position).getOverallGain())
+                break;
 
-	if (position == topTen.size() && !(position< topX) )
-	    return;
+            position++;
+        }
 
-	//System.out.println("Inserting " + profile.getName() + " at " + position);
-	topTen.insertElementAt(profile, position);
+        if (position == topTen.size() && !(position < topX))
+            return;
 
-	//if we are over the size of hall of fame, remove the last player
-	if (topTen.size() > topX)
-	    topTen.removeElement(topTen.lastElement());
+        //System.out.println("Inserting " + profile.getName() + " at " + position);
+        topTen.insertElementAt(profile, position);
+
+        //if we are over the size of hall of fame, remove the last player
+        if (topTen.size() > topX)
+            topTen.removeElement(topTen.lastElement());
     }
 
-    public static String getTopTen()
-    {
-	StringBuilder result = new StringBuilder(Protocol.topten + Protocol.separator);
+    public static String getTopTen() {
+        StringBuilder result = new StringBuilder(Protocol.topten + Protocol.separator);
 
-	for (int i = 0; i < topTen.size(); i++)
-	    result.append(topTen.elementAt(i)).append(Protocol.separator);
-	
-	return result.toString();
+        for (int i = 0; i < topTen.size(); i++)
+            result.append(topTen.elementAt(i)).append(Protocol.separator);
+
+        return result.toString();
     }
 
     //register a logged in player. essentially adds a player to a game he 
     //will participate in. if there is no available game - make a new one
     //player can only participate in the game that matches his resolution
-    public static Game register(ServerThread player, String resolution)
-    {
-	Game g;
-	
-	//find an emtpy game and add the player to it.
-	for (int i = 0; i < games.size(); i++)
-	    {	    
-		g = games.elementAt(i);
-		if (g.reserveSpot(resolution))
-		    {
-			g.addPlayer(player, Protocol.loggedin);
-			return g;
-		    }
-	    }
-	
-	//no available games. make a new one and add the player to it
-	g = new Game(game_count++, resolution);
-	games.addElement(g);
-	g.addPlayer(player, Protocol.loggedin);
-	return g;
+    public static Game register(ServerThread player, String resolution) {
+        Game g;
+
+        //find an emtpy game and add the player to it.
+        for (int i = 0; i < games.size(); i++) {
+            g = games.elementAt(i);
+            if (g.reserveSpot(resolution)) {
+                g.addPlayer(player, Protocol.loggedin);
+                return g;
+            }
+        }
+
+        //no available games. make a new one and add the player to it
+        g = new Game(game_count++, resolution);
+        games.addElement(g);
+        g.addPlayer(player, Protocol.loggedin);
+        return g;
     }
 
-    public static void removeGame( Game g )
-    {
-	games.removeElement(g);
+    public static void removeGame(Game g) {
+        games.removeElement(g);
     }
 
-    public static void broadcast( String msg )
-    {
-	for (int i = 0; i < games.size(); i++)
-	    games.elementAt(i).broadcast( msg );
+    public static void broadcast(String msg) {
+        for (int i = 0; i < games.size(); i++)
+            games.elementAt(i).broadcast(msg);
     }
 
     //stop listening for connection
     //and disable disk access
-    public void shutdown()
-    {
-	broadcast( Protocol.say + Protocol.separator + "Server is shuting "+
-		   "down.  You may continue playing, but all profile "+
-		   "modifications (such as changing password) will be lost");
-	broadcast( Protocol.say + Protocol.separator + "If you notice any " +
-		   "strange behavior in the game please report to " +
-		   "alexr@scorch2000.com");
-	try
-	    {
-		s_socket.close();
-	    }
-	catch (IOException e)
-	    {
-		System.out.println("ScorchServer: error shutting down " + e);
-	    }
-	disk.shutdown();
+    public void shutdown() {
+        broadcast(Protocol.say + Protocol.separator + "Server is shuting " +
+                "down.  You may continue playing, but all profile " +
+                "modifications (such as changing password) will be lost");
+        broadcast(Protocol.say + Protocol.separator + "If you notice any " +
+                "strange behavior in the game please report to " +
+                "alexr@scorch2000.com");
+        try {
+            s_socket.close();
+        } catch (IOException e) {
+            System.out.println("ScorchServer: error shutting down " + e);
+        }
+        disk.shutdown();
     }
 
-    public void runServer()
-    {
-	ServerThread st = null;
-	try
-	    {
-		//maximum of 5 connections in a queue
-		s_socket = new ServerSocket(port, 5);
-		
-		while (true)
-		    {
-			//System.out.println("SERVER: accepting on port "+port);
+    public void runServer() {
+        try {
+            //maximum of 5 connections in a queue
+            s_socket = new ServerSocket(port, 5);
+
+            while (true) {
+                //System.out.println("SERVER: accepting on port "+port);
                 Socket accept = s_socket.accept();
 
-			new ServerThread(accept);
+                new ServerThread(accept);
 
-			Thread.yield();
-		    }
-	    }
-	catch (Exception e)
-	    {
-		//System.err.println("SERVER: listening failed "+ e);
-		//System.exit(-1);
-	    }
+                Thread.yield();
+            }
+        } catch (Exception e) {
+            //System.err.println("SERVER: listening failed "+ e);
+            //System.exit(-1);
+        }
 
-	try 
-	    {
-		while( games.size() > 0 )
-		    Thread.sleep( 1000 );
-	    }
-	catch (Exception e)
-	    {}
+        try {
+            while (games.size() > 0)
+                Thread.sleep(1000);
+        } catch (Exception e) {
+        }
     }
 }

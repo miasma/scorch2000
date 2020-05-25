@@ -10,9 +10,8 @@
 
 package scorch;
 
-public final class Protocol
-{
-    public static final char separator = (char)0;
+public final class Protocol {
+    public static final char separator = (char) 0;
 
     //general commands
     public static final String commandfailed = "COMMANDFAILED";//'reason'
@@ -44,7 +43,7 @@ public final class Protocol
     public static final String useitem = "USEITEM";      //'item_id' 'quantity'
     public static final String quit = "QUIT";
     public static final String changeprofile = "CHPROF"; //'new profile'
-    public static String donebuying = "DONEBUYING"; 
+    public static String donebuying = "DONEBUYING";
     public static final String endofround = "EOR";             //'stats of round'
     public static final String endofgame = "EOG";              //'stats of game'
 

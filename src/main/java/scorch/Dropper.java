@@ -9,72 +9,60 @@ package scorch;
   Current dropping algorithm is not suited for that though.
 */
 
-public class Dropper
-{
+public class Dropper {
     private final Bitmap bitmap;
     private final int groundColor;
     private final int startx;
     private final int endx;
     private final int height;
 
-    public Dropper(Bitmap bitmap, int startx, int endx)
-    {
-	this.bitmap = bitmap;
+    public Dropper(Bitmap bitmap, int startx, int endx) {
+        this.bitmap = bitmap;
 
         int width = bitmap.getWidth();
-	this.height = bitmap.getHeight();
+        this.height = bitmap.getHeight();
 
-	this.startx = Math.max(0, startx);
-	this.endx = Math.min(width, endx);
+        this.startx = Math.max(0, startx);
+        this.endx = Math.min(width, endx);
 
-	this.groundColor = bitmap.getSandColor();
-	
-	run();
+        this.groundColor = bitmap.getSandColor();
+
+        run();
     }
 
-    public void run()
-    {
-	int lowerBound, upperBound, thickness, j;
+    public void run() {
+        int lowerBound, upperBound, thickness, j;
 
-	for(int i = startx; i <= endx; i++)
-	    {
-		j = 0; 
-		while( j < height )
-		    {
-			lowerBound = height;
-			upperBound = j;
-			thickness = 0;
-			for(; j < height; j++)
-			    {
-				if( bitmap.isGround(i, j) )
-				    {
-					thickness++;
-				    }
-				else
-				    {
-					if( !bitmap.isBackground(i, j) )
-					    {
-						lowerBound = j++;
-						break;
-					    }
-				    }
-			    }
-			
-			if( thickness > 0 )
-			    {
-				bitmap.setColor(groundColor);
-				bitmap.drawLine(i, lowerBound-thickness, 
-						i, lowerBound-1);
+        for (int i = startx; i <= endx; i++) {
+            j = 0;
+            while (j < height) {
+                lowerBound = height;
+                upperBound = j;
+                thickness = 0;
+                for (; j < height; j++) {
+                    if (bitmap.isGround(i, j)) {
+                        thickness++;
+                    } else {
+                        if (!bitmap.isBackground(i, j)) {
+                            lowerBound = j++;
+                            break;
+                        }
+                    }
+                }
 
-				if( upperBound < lowerBound-thickness-1 )
-				    {
-					bitmap.setColor(null);
-					bitmap.drawLine
-					    (i, upperBound, i, 
-					     lowerBound-thickness-1);
-				    }
-			    }
-		    }
-	    }
+                if (thickness > 0) {
+                    bitmap.setColor(groundColor);
+                    bitmap.drawLine(i, lowerBound - thickness,
+                            i, lowerBound - 1);
+
+                    if (upperBound < lowerBound - thickness - 1) {
+                        bitmap.setColor(null);
+                        bitmap.drawLine
+                                (i, upperBound, i,
+                                        lowerBound - thickness - 1);
+                    }
+                }
+            }
+        }
     }
 }

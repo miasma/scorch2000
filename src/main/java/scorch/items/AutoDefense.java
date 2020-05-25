@@ -12,29 +12,24 @@ import java.awt.*;
 
 import scorch.ScorchApplet;
 
-public class AutoDefense extends Item
-{
-    public AutoDefense()
-    {
-	type = AutoDefense;
-	price = 5000;
+public class AutoDefense extends Item {
+    public AutoDefense() {
+        type = AutoDefense;
+        price = 5000;
     }
 
-    public ItemControl getControlPanel(ScorchApplet owner)
-    {
-	controlPanel = new AutoDefenseControl(this, owner);
-	return controlPanel;
+    public ItemControl getControlPanel(ScorchApplet owner) {
+        controlPanel = new AutoDefenseControl(this, owner);
+        return controlPanel;
     }
 }
 
-class AutoDefenseControl extends ItemControl
-{
-    public AutoDefenseControl(Item ad, ScorchApplet owner)
-    {
-	super(ad, owner);
-	
-	setLayout(new FlowLayout());
-	control = new Label("active");
-	add(control);
+class AutoDefenseControl extends ItemControl {
+    public AutoDefenseControl(Item ad, ScorchApplet owner) {
+        super(ad, owner);
+
+        setLayout(new FlowLayout());
+        control = new Label("active");
+        add(control);
     }
 }

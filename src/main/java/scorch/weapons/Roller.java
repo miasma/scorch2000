@@ -11,9 +11,9 @@ public class Roller extends Weapon
 {
     public Roller()
     {
+		super(RollerExplosion::new);
 	type = Roller;
 	price = 13000;
 	argument = RollerExplosion.ROLLER;
-	explosionClass = "RollerExplosion";
     }
 }

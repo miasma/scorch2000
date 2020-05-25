@@ -13,8 +13,7 @@ package scorch;
 import scorch.weapons.*;
 import scorch.utility.Debug;
 
-public class AIPlayer extends ScorchPlayer implements Runnable
-{
+public class AIPlayer extends ScorchPlayer implements Runnable {
     public static final String[] names = {"Shooter", "Cyborg", "Killer"};
     public static final int numAI = names.length;
 
@@ -24,131 +23,116 @@ public class AIPlayer extends ScorchPlayer implements Runnable
 
     private int type; // ai type, index in the above arrays
 
-	public AIPlayer(int id, PlayerProfile profile, ScorchApplet owner)
-    {
-	super(id, profile, owner);
-	
-	String name = profile.getName();
-	for( type = 0; type < numAI; type++ )
-	    if( name.equals(names[type]) )
-		break;
+    public AIPlayer(int id, PlayerProfile profile, ScorchApplet owner) {
+        super(id, profile, owner);
 
-	if( type >= numAI )
-	    System.err.println("AIPlayer: internal error, unknown ai type: "+
-			       name);
+        String name = profile.getName();
+        for (type = 0; type < numAI; type++)
+            if (name.equals(names[type]))
+                break;
+
+        if (type >= numAI)
+            System.err.println("AIPlayer: internal error, unknown ai type: " +
+                    name);
     }
 
     // override this to make AI tanks look different
-    public void setTankType(int ignored)
-    {
-	tankType = type;
-    }
-    
-    public long getBounty()
-    {
-	return bounty[type];
+    public void setTankType(int ignored) {
+        tankType = type;
     }
 
-    public int getAccuracy()
-    {
-	return accuracy[type];
+    public long getBounty() {
+        return bounty[type];
     }
 
-    public double getRadiusFactor()
-    {
-	return rfactor[type];
+    public int getAccuracy() {
+        return accuracy[type];
     }
 
-    public void makeTurn()
-    {
-	if( isFirstTurn() )
-	    autoDefense();
-	else
-	    aimedFire();
+    public double getRadiusFactor() {
+        return rfactor[type];
     }
 
-    private void aimedFire()
-    {
-		Thread thread = new Thread(this, "ai-aimer-thread");
-	thread.start();
+    public void makeTurn() {
+        if (isFirstTurn())
+            autoDefense();
+        else
+            aimedFire();
     }
 
-    public void buyAmmunition()
-    {
-	//System.out.println(getName()+" buying ammo for "+getCash()); // TODO
+    private void aimedFire() {
+        Thread thread = new Thread(this, "ai-aimer-thread");
+        thread.start();
     }
 
-    private void autoDefense()
-    {
-	if( useAutoDefense() )
-	    {
-		//System.out.println(getName()+" using AutoDefense"); // TODO
-	    }
-	owner.sendEOT();
+    public void buyAmmunition() {
+        //System.out.println(getName()+" buying ammo for "+getCash()); // TODO
     }
 
-    public void run()
-    {
-	aim();
-	owner.aiFire(this);
+    private void autoDefense() {
+        if (useAutoDefense()) {
+            //System.out.println(getName()+" using AutoDefense"); // TODO
+        }
+        owner.sendEOT();
     }
-    
+
+    public void run() {
+        aim();
+        owner.aiFire(this);
+    }
+
     // the algorythm for AI aiming which just tries to shoot at different
     // angles with different power until it finds a target
     // Here is the list of improvements which *must* be done to AI:
     // TODO: different weapons
     //       normal strength selection
     //       try to fire in direction of opponent even if can't hit directly
-    private void aim()
-    {
-	RoundMissile missile;
-	ExplosionInfo ei;
-	int startAngle = getAngle(), startPower = getPower();
+    private void aim() {
+        RoundMissile missile;
+        ExplosionInfo ei;
+        int startAngle = getAngle(), startPower = getPower();
         int curAngle, curPower, accuracy;
-	double radiusFactor;
+        double radiusFactor;
 
-	accuracy = getAccuracy();
-	radiusFactor = getRadiusFactor();
+        accuracy = getAccuracy();
+        radiusFactor = getRadiusFactor();
 
         curAngle = getAngle();
-	do
-	    {
-		// power increment depens on accuracy,
-		// accuracy is angle increment. confused? good.
-                curPower = incPower(10*accuracy); 
-                Debug.println("ai is aiming, power is: "+curPower+" angle: "+
-			      getAngle()+" startPower: "+startPower);
+        do {
+            // power increment depens on accuracy,
+            // accuracy is angle increment. confused? good.
+            curPower = incPower(10 * accuracy);
+            Debug.println("ai is aiming, power is: " + curPower + " angle: " +
+                    getAngle() + " startPower: " + startPower);
 
-		if( Math.abs(curPower - startPower) < 10*accuracy )
-		    {
-                        curPower = startPower;
-			curAngle = incAngle(accuracy);
-                        if( Math.abs(curAngle - startAngle) < accuracy )
-                          curAngle = startAngle;
-		    }
-		
-		// make a fake missile to see were it lands
-		int angle = getAngle();
-		
-		missile = new RoundMissile
-		    (bitmap,
-		     new Physics(getTurretX(2.0),
-					 bitmap.getHeight()-getTurretY(2.0),
-				 angle, getPower() / 8.0),
-		     new SimpleExplosion
-			 (bitmap,(int)(SimpleExplosion.MISSILE*radiusFactor)));
-				
-		// to determine if there was an explosion at all
-		ei = missile.getExplosionInfo(); 
+            if (Math.abs(curPower - startPower) < 10 * accuracy) {
+                curPower = startPower;
+                curAngle = incAngle(accuracy);
+                if (Math.abs(curAngle - startAngle) < accuracy)
+                    curAngle = startAngle;
+            }
 
-		try 
-		    {
-			Thread.sleep(3);
-		    }
-		catch(InterruptedException e) {}
-		}
-	while( (ei == null || 
-		scorchField.killTanks(missile, this, true) <= 0) && 
-	       (curAngle != startAngle || curPower != startPower));
+            // make a fake missile to see were it lands
+            int angle = getAngle();
+
+            missile = new RoundMissile
+                    (bitmap,
+                            new Physics(getTurretX(2.0),
+                                    bitmap.getHeight() - getTurretY(2.0),
+                                    angle, getPower() / 8.0),
+                            new SimpleExplosion
+                                    (bitmap, (int) (SimpleExplosion.MISSILE * radiusFactor)));
+
+            // to determine if there was an explosion at all
+            ei = missile.getExplosionInfo();
+
+            try {
+                Thread.sleep(3);
+            } catch (InterruptedException e) {
+            }
+        }
+        while ((ei == null ||
+                scorchField.killTanks(missile, this, true) <= 0) &&
+                (curAngle != startAngle || curPower != startPower));
     }
 }

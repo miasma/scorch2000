@@ -1,6 +1,6 @@
 package scorch.weapons;
 
-/*
+/*Directional
   Classes: Explosion
   Author:  Nathan Roslavker
   Purpose: This a base class for all explosion classes. It implements

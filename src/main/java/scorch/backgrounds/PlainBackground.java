@@ -9,19 +9,16 @@ package scorch.backgrounds;
 
 import java.awt.Color;
 
-public class PlainBackground extends Background
-{
+public class PlainBackground extends Background {
     private final int color;
 
-    public PlainBackground(int width, int height, Color color)
-    {
-	super(width, height);
+    public PlainBackground(int width, int height, Color color) {
+        super(width, height);
 
-	this.color = color.getRGB();
+        this.color = color.getRGB();
     }
 
-    public int getPixelColor(int x, int y)
-    {
-	return color;
+    public int getPixelColor(int x, int y) {
+        return color;
     }
 }

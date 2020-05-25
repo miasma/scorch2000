@@ -9,37 +9,33 @@ package scorch.backgrounds;
 
 import java.util.Random;
 
-public class StarsBackground extends Background
-{
+public class StarsBackground extends Background {
     private final int[] stars;
 
-	public StarsBackground(int width, int height, Random rand)
-    {
-	super(width, height);
+    public StarsBackground(int width, int height, Random rand) {
+        super(width, height);
 
-		stars = new int[width];
-	
-	for(int i = 0; i < width; i++)
-	    {
-		if( i % 3 == 0 )
-		    stars[i] = Math.abs(rand.nextInt()) % height;
-		else
-		    stars[i] = -1;
-	    }
+        stars = new int[width];
+
+        for (int i = 0; i < width; i++) {
+            if (i % 3 == 0)
+                stars[i] = Math.abs(rand.nextInt()) % height;
+            else
+                stars[i] = -1;
+        }
     }
 
-    public int getPixelColor(int x, int y)
-    {
-	int i;
+    public int getPixelColor(int x, int y) {
+        int i;
 
-	if( x < 0 || x >= width || y < 0 || y >= height )
-	    return 0;
+        if (x < 0 || x >= width || y < 0 || y >= height)
+            return 0;
 
-	i = 255 - (255*y/height);
+        i = 255 - 255 * y / height;
 
-	if( stars[x] == y )
-	    return (255 << 24) | (i << 16) | (i << 8) | i;
-	else
-	    return (255 << 24);
+        if (stars[x] == y)
+            return (255 << 24) | (i << 16) | (i << 8) | i;
+        else
+            return 255 << 24;
     }
 }

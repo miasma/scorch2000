@@ -4,17 +4,19 @@ package ScorchServer.ServerShell.commands;
 /*
   List all current games
 */
+
 import java.util.Vector;
+
 import ScorchServer.ScorchServer;
 import ScorchServer.ServerShell.ServerShell;
 
-public class lg extends shellCommand
-{
-    public static String help = "To list the current games";
+public class lg extends shellCommand {
+    public String getHelp() {
+        return "To list the current games";
+    }
 
     //arguments are ignored here for now.
-    public static void run(Vector<String> args, Object owner)
-    {
-	((ServerShell)owner).print(ScorchServer.allGamesToString());
+    public void run(Vector<String> args, ServerShell owner) {
+        owner.print(ScorchServer.allGamesToString());
     }
 }

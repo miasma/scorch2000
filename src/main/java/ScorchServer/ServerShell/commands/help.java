@@ -8,16 +8,13 @@ import java.util.*;
 
 import ScorchServer.ServerShell.ServerShell;
 
-public class help extends shellCommand
-{
-    public static String help = "To get this help message.";
+public class help extends shellCommand {
+    public String getHelp() {
+        return "To get this help message.";
+    }
 
     //arguments are ignored here for now.
-    public static void run(Vector<String> args, Object owner)
-    {
-	ServerShell shell = (ServerShell)owner;
-	String[] help = shell.getCommandHelp();
-
-        for (String s : help) shell.println(s);
+    public void run(Vector<String> args, ServerShell shell) {
+        for (shellCommand cmd: shell.commands) shell.println(cmd.getHelp());
     }
 }

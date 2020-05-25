@@ -9,9 +9,9 @@ public class FunkyNuke extends Weapon
 {
     public FunkyNuke()
     {
+		super(FunkyExplosion::new);
 	type = FunkyNuke;
 	price = 50000;
 	argument = 10;
-	explosionClass = "FunkyExplosion";
     }
 }

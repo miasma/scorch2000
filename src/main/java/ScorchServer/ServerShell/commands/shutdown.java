@@ -9,13 +9,13 @@ import java.util.Vector;
 
 import ScorchServer.ServerShell.ServerShell;
 
-public class shutdown extends shellCommand
-{
-    public static String help = "Shut down the server. games finished without access to profile db.";
+public class shutdown extends shellCommand {
+    public String getHelp() {
+        return "Shut down the server. games finished without access to profile db.";
+    }
 
-    public static void run(Vector<String> args, Object owner)
-    {
-	((ServerShell)owner).println("Shutting down server...");
-	((ServerShell)owner).shutdownServer();
+    public void run(Vector<String> args, ServerShell owner) {
+        owner.println("Shutting down server...");
+        owner.shutdownServer();
     }
 }

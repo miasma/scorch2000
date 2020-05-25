@@ -12,114 +12,112 @@ import java.net.*;
 import scorch.*;
 import swindows.*;
 
-public class BannerWindow extends sWindow implements ActionListener
-{
+public class BannerWindow extends sWindow implements ActionListener {
     private final String address;
 
-    public BannerWindow(ScorchApplet owner, String image, String address)
-    {
-	super(-1,-1,0,0,"Advertisment", owner);
-   
-	this.address = address;
+    private final ScorchApplet applet;
 
-	Button bCancel = new Button("Maybe later"), 
-	    bVisit = new Button("Open the page");
+    public BannerWindow(ScorchApplet owner, String image, String address) {
+        super(-1, -1, 0, 0, "Advertisment", owner);
+        this.applet = owner;
 
-	Panel pb = new Panel(), pt = new Panel(), 
-	    pl = new Panel(new GridLayout(2,1));
-	sPanel pbn = new sPanel(-1,-1);
-	pb.setLayout(new FlowLayout(FlowLayout.CENTER));
-	pb.add(bVisit);
-	pb.add(bCancel);
+        this.address = address;
 
-	setLayout(new BorderLayout(0,0));
-	pbn.add(new Banner(this, image, address));
-	pt.add(pbn);
-	add(pt, BorderLayout.NORTH); 
-	pl.add(new Label("Please support our sponsors and us by clicking on "+
-			 "the banner above", Label.CENTER));
-	pl.add(new Label("Clicking banner will not terminate current game", 
-			 Label.CENTER));
-	add(pl, BorderLayout.CENTER);
-	add(pb, BorderLayout.SOUTH);
-	
-	bCancel.addActionListener(this);
-	bVisit.addActionListener(this);
+        Button bCancel = new Button("Maybe later"),
+                bVisit = new Button("Open the page");
 
-	validate();
+        Panel pb = new Panel(), pt = new Panel(),
+                pl = new Panel(new GridLayout(2, 1));
+        sPanel pbn = new sPanel(-1, -1);
+        pb.setLayout(new FlowLayout(FlowLayout.CENTER));
+        pb.add(bVisit);
+        pb.add(bCancel);
+
+        setLayout(new BorderLayout(0, 0));
+        pbn.add(new Banner(this, image, address));
+        pt.add(pbn);
+        add(pt, BorderLayout.NORTH);
+        pl.add(new Label("Please support our sponsors and us by clicking on " +
+                "the banner above", Label.CENTER));
+        pl.add(new Label("Clicking banner will not terminate current game",
+                Label.CENTER));
+        add(pl, BorderLayout.CENTER);
+        add(pb, BorderLayout.SOUTH);
+
+        bCancel.addActionListener(this);
+        bVisit.addActionListener(this);
+
+        validate();
     }
 
-    public void visit(String surl)
-    {
-	URL burl = null;
-	try
-	    {
-		burl = new URL(surl);
-	    }
-	catch(MalformedURLException e) {}
-	
-	close();
-	((ScorchApplet)owner).banner(burl);
+    public void visit(String surl) {
+        URL burl = null;
+        try {
+            burl = new URL(surl);
+        } catch (MalformedURLException e) {
+        }
+
+        close();
+        applet.banner(burl);
     }
 
-    public void actionPerformed(ActionEvent evt)
-    {
-	String cmd = evt.getActionCommand();
+    public void actionPerformed(ActionEvent evt) {
+        String cmd = evt.getActionCommand();
 
-	if( cmd.equals("Open the page") )
-	    visit(address);
-	else
-	    ((ScorchApplet)owner).banner(null);
+        if (cmd.equals("Open the page"))
+            visit(address);
+        else
+            applet.banner(null);
 
-	close();
-	}
+        close();
+    }
 }
 
-class Banner extends Canvas implements MouseListener
-{
-	private final String url; // = "http://www.commission-junction.com/track/track.dll?AID=538392&PID=542124&URL=http%3A%2F%2Fwww%2Etechsumer%2Ecom";
+class Banner extends Canvas implements MouseListener {
+    private final String url; // = "http://www.commission-junction.com/track/track.dll?AID=538392&PID=542124&URL=http%3A%2F%2Fwww%2Etechsumer%2Ecom";
     private final Image banner;
 
     private final BannerWindow owner;
 
-    Banner(BannerWindow owner, String image, String address)
-    {
-	super();
-	this.owner = owner;
-		// = "b1.gif";
-		this.url = address;
-	
-	MediaTracker tracker = new MediaTracker(this);
-	banner = ScorchApplet.getImage(image);
-	tracker.addImage(banner,0);
-	
-	try
-	    {
-		tracker.waitForAll();
-	    }
-	catch(InterruptedException e)
-	    {
-		System.err.println(e);
-	    }
-	setSize(banner.getWidth(this), banner.getHeight(this));
-	setCursor(new Cursor(Cursor.HAND_CURSOR));
+    Banner(BannerWindow owner, String image, String address) {
+        super();
+        this.owner = owner;
+        // = "b1.gif";
+        this.url = address;
 
-	addMouseListener(this);
+        MediaTracker tracker = new MediaTracker(this);
+        banner = ScorchApplet.getImage(image);
+        tracker.addImage(banner, 0);
+
+        try {
+            tracker.waitForAll();
+        } catch (InterruptedException e) {
+            System.err.println(e);
+        }
+        setSize(banner.getWidth(this), banner.getHeight(this));
+        setCursor(new Cursor(Cursor.HAND_CURSOR));
+
+        addMouseListener(this);
     }
-    
-    public void mouseClicked(MouseEvent evt) 
-    {
-	owner.visit(url);
-    }	
 
-    public void mousePressed(MouseEvent evt) {}
-    public void mouseReleased(MouseEvent evt) {}
-    public void mouseEntered(MouseEvent evt) {}
-    public void mouseExited(MouseEvent evt) {}
+    public void mouseClicked(MouseEvent evt) {
+        owner.visit(url);
+    }
 
-    public void paint(Graphics g)
-    {
-	g.drawImage(banner,0,0,this);
+    public void mousePressed(MouseEvent evt) {
+    }
+
+    public void mouseReleased(MouseEvent evt) {
+    }
+
+    public void mouseEntered(MouseEvent evt) {
+    }
+
+    public void mouseExited(MouseEvent evt) {
+    }
+
+    public void paint(Graphics g) {
+        g.drawImage(banner, 0, 0, this);
     }
 }
 

@@ -9,75 +9,67 @@ package swindows;
 
 import java.awt.*;
 
-public class sWindow extends sPanel 
-{
-    private int drag_x, drag_y;
-    private boolean drag;
-    private Image dragBuffer;
+public class sWindow extends sPanel {
+    //private int drag_x, drag_y;
+    //private boolean drag;
+    //private Image dragBuffer;
 
     protected String name; // windows name
     protected final Container owner; // each window has an owner
-    
-    private Component border;
-    
+
+    //private Component border;
+
     protected boolean doubleBorder = true; // border type
 
     // all the components are inserted into the mainPanel, not in the 
     // sWindow directly
     public final Container mainPanel;
 
-    public sWindow(int x, int y, int w, int h, String name, 
-		   Color bkColor, Color textColor, Container owner)
-    {
-	this(x, y, w, h, name, owner);
-	this.bkColor = bkColor;
-	this.textColor = textColor;
+    public sWindow(int x, int y, int w, int h, String name,
+                   Color bkColor, Color textColor, Container owner) {
+        this(x, y, w, h, name, owner);
+        this.bkColor = bkColor;
+        this.textColor = textColor;
     }
-    
-    public sWindow(int x, int y, int w, int h, String name, Container owner)
-    {
+
+    public sWindow(int x, int y, int w, int h, String name, Container owner) {
         super(x, y, w, h);
-	this.name = name;
-	this.owner = owner;
+        this.name = name;
+        this.owner = owner;
 
-	setBackground(bkColor);
+        setBackground(bkColor);
 
-	this.mainPanel = new Panel();
-	
-	if(name != null)
-	    {
-		mainPanel.setLocation(wndBorder*3, 5*wndBorder + fontHeight);
-		mainPanel.setSize(width-6*wndBorder, 
-				  height-8*wndBorder - fontHeight);
-	    }
-	else
-	    {
-		mainPanel.setLocation(wndBorder*3, 3*wndBorder);
-		mainPanel.setSize(width-6*wndBorder, 
-				  height-6*wndBorder);
-	    }
+        this.mainPanel = new Panel();
 
-	super.setLayout(null);
-	super.add(mainPanel);
+        if (name != null) {
+            mainPanel.setLocation(wndBorder * 3, 5 * wndBorder + fontHeight);
+            mainPanel.setSize(width - 6 * wndBorder,
+                    height - 8 * wndBorder - fontHeight);
+        } else {
+            mainPanel.setLocation(wndBorder * 3, 3 * wndBorder);
+            mainPanel.setSize(width - 6 * wndBorder,
+                    height - 6 * wndBorder);
+        }
+
+        super.setLayout(null);
+        super.add(mainPanel);
 
 	/*owner.addMouseMotionListener(this);
 	  owner.addMouseListener(this);*/
-	setVisible(false);
+        setVisible(false);
     }
-    
-    public void setDoubleBorder(boolean db)
-    {
-	doubleBorder = db;
+
+    public void setDoubleBorder(boolean db) {
+        doubleBorder = db;
     }
-    
-    public void display()
-    {
-	owner.add(this, 0);
-	setVisible(false);
-	place();
-	validate();
-	setVisible(true);
-	requestFocus();
+
+    public void display() {
+        owner.add(this, 0);
+        setVisible(false);
+        place();
+        validate();
+        setVisible(true);
+        requestFocus();
     }
 
     /*public void update(Graphics g) 
@@ -104,157 +96,139 @@ public class sWindow extends sPanel
 	   sPaint(g);
 	   }*/
 
-    public void paint(Graphics g)
-    {
-	if( !doubleBorder )
-	    {
-		super.paint(g);
-		return;
-	    }
+    public void paint(Graphics g) {
+        if (!doubleBorder) {
+            super.paint(g);
+            return;
+        }
 
-	if( fm == null ) 
-	    {
-		fm = g.getFontMetrics();
-		fontHeight = fm.getMaxAscent() + fm.getMaxDescent();
-	    }
-	
-	g.setColor(bkColor);
-	g.fill3DRect(0,0,width,height,true);
+        if (fm == null) {
+            fm = g.getFontMetrics();
+            fontHeight = fm.getMaxAscent() + fm.getMaxDescent();
+        }
 
-	if( name != null )
-	    {
-		g.setColor(bkColor);		
-		g.fill3DRect(wndBorder, wndBorder, width-2*wndBorder, 
-			     wndBorder+fontHeight, false);
-		g.fill3DRect(wndBorder, 3*wndBorder + fontHeight, 
-			     width-2*wndBorder, 
-			     height-4*wndBorder - fontHeight, false);
-		g.fill3DRect(wndBorder*2, 4*wndBorder + fontHeight,
-			     width-4*wndBorder, 
-			     height-6*wndBorder - fontHeight, true);
-	
-		g.drawString(name, (width - fm.stringWidth(name))/2, 
-			     wndBorder+fm.getMaxAscent());
-		mainPanel.setLocation(wndBorder*3, 5*wndBorder + fontHeight);
-	    }
-	else
-	    {
-		g.fill3DRect(wndBorder, wndBorder, 
-			     width-2*wndBorder, 
-			     height-2*wndBorder, false);
-		g.fill3DRect(wndBorder*2, wndBorder*2,
-			     width-4*wndBorder, 
-			     height-4*wndBorder, true);
-	    }
-	g.setColor(textColor);
+        g.setColor(bkColor);
+        g.fill3DRect(0, 0, width, height, true);
+
+        if (name != null) {
+            g.setColor(bkColor);
+            g.fill3DRect(wndBorder, wndBorder, width - 2 * wndBorder,
+                    wndBorder + fontHeight, false);
+            g.fill3DRect(wndBorder, 3 * wndBorder + fontHeight,
+                    width - 2 * wndBorder,
+                    height - 4 * wndBorder - fontHeight, false);
+            g.fill3DRect(wndBorder * 2, 4 * wndBorder + fontHeight,
+                    width - 4 * wndBorder,
+                    height - 6 * wndBorder - fontHeight, true);
+
+            g.drawString(name, (width - fm.stringWidth(name)) / 2,
+                    wndBorder + fm.getMaxAscent());
+            mainPanel.setLocation(wndBorder * 3, 5 * wndBorder + fontHeight);
+        } else {
+            g.fill3DRect(wndBorder, wndBorder,
+                    width - 2 * wndBorder,
+                    height - 2 * wndBorder, false);
+            g.fill3DRect(wndBorder * 2, wndBorder * 2,
+                    width - 4 * wndBorder,
+                    height - 4 * wndBorder, true);
+        }
+        g.setColor(textColor);
     }
 
-    public void remove(Component c)
-    {
-	mainPanel.remove(c);
+    public void remove(Component c) {
+        mainPanel.remove(c);
     }
 
-    public void add(Component c, Object t)
-    {
-	mainPanel.add(c, t);
+    public void add(Component c, Object t) {
+        mainPanel.add(c, t);
     }
 
-    public Component add(Component c, int t)
-    {
-	return mainPanel.add(c, t);
-    }
-    
-    public Component add(Component c)
-    {
-	return mainPanel.add(c);
+    public Component add(Component c, int t) {
+        return mainPanel.add(c, t);
     }
 
-    public void setLayout(LayoutManager l)
-    {
-	if(mainPanel != null)
-	    mainPanel.setLayout(l);
+    public Component add(Component c) {
+        return mainPanel.add(c);
     }
 
-    public int getWidth()
-    {
-	return width;
+    public void setLayout(LayoutManager l) {
+        if (mainPanel != null)
+            mainPanel.setLayout(l);
     }
 
-    public int getHeight()
-    {
-	return height;
+    public int getWidth() {
+        return width;
     }
 
-    public int getFontHeight()
-    {
-	return fontHeight;
+    public int getHeight() {
+        return height;
     }
 
-    protected void place()
-    {
-        if(width == 0 && height == 0)
-	    {
-		Dimension ps;
-		mainPanel.validate();
-		ps = mainPanel.getPreferredSize();
-		mainPanel.setSize(ps);
-
-		width = ps.width+6*wndBorder;
-		height = ps.height+8*wndBorder + fontHeight;		
-	    }
-	
-	setSize(width, height);
-	if( x == -1 && y == -1 ) center();
-	setLocation(x, y);
+    public int getFontHeight() {
+        return fontHeight;
     }
-    
-    protected void center()
-    {
-	Dimension d = owner.getSize();
-	x = (d.width-width)/2;
-	y = (d.height-height)/2;
+
+    protected void place() {
+        if (width == 0 && height == 0) {
+            Dimension ps;
+            mainPanel.validate();
+            ps = mainPanel.getPreferredSize();
+            mainPanel.setSize(ps);
+
+            width = ps.width + 6 * wndBorder;
+            height = ps.height + 8 * wndBorder + fontHeight;
+        }
+
+        setSize(width, height);
+        if (x == -1 && y == -1) center();
+        setLocation(x, y);
+    }
+
+    protected void center() {
+        Dimension d = owner.getSize();
+        x = (d.width - width) / 2;
+        y = (d.height - height) / 2;
 	/*setLocation(x, y);
 	  validate();*/
-    } 
-
-    protected GridBagConstraints makeConstraints
-	(int gridx, int gridy, int gridw, int gridh, int fill, 
-	 int wx, int wy, int a, Insets i, int sx, int sy)
-    {
-	GridBagConstraints c = new GridBagConstraints();
-	
-	c.gridx = gridx; c.gridy = gridy;
-	c.gridwidth = gridw; c.gridheight = gridh;
-	c.fill = fill;
-	c.weightx = wx;
-	c.weighty = wy;
-	c.anchor = a;
-	c.ipadx = sx; c.ipady = sy;
-	c.insets = i;
-	
-	return c;
     }
 
     protected GridBagConstraints makeConstraints
-	(int gridx, int gridy, int gridw, int gridh, int fill,int a, Insets i) 
-    {
-	return makeConstraints
-	    (gridx, gridy, gridw, gridh, fill, 1, 1, a, i, 0, 0);
+            (int gridx, int gridy, int gridw, int gridh, int fill,
+             int wx, int wy, int a, Insets i, int sx, int sy) {
+        GridBagConstraints c = new GridBagConstraints();
+
+        c.gridx = gridx;
+        c.gridy = gridy;
+        c.gridwidth = gridw;
+        c.gridheight = gridh;
+        c.fill = fill;
+        c.weightx = wx;
+        c.weighty = wy;
+        c.anchor = a;
+        c.ipadx = sx;
+        c.ipady = sy;
+        c.insets = i;
+
+        return c;
     }
 
     protected GridBagConstraints makeConstraints
-	(int gridx, int gridy, int gridw, int gridh, int fill,
-	 int a, int sx, int sy)
-    {
-	return makeConstraints
-	    (gridx, gridy, gridw, gridh, fill, 1, 1, a, 
-	     new Insets(0,0,0,0), sx, sy);
+            (int gridx, int gridy, int gridw, int gridh, int fill, int a, Insets i) {
+        return makeConstraints
+                (gridx, gridy, gridw, gridh, fill, 1, 1, a, i, 0, 0);
     }
-    
-    public void close()
-    {
-	setVisible(false);
-	owner.remove(this);
+
+    protected GridBagConstraints makeConstraints
+            (int gridx, int gridy, int gridw, int gridh, int fill,
+             int a, int sx, int sy) {
+        return makeConstraints
+                (gridx, gridy, gridw, gridh, fill, 1, 1, a,
+                        new Insets(0, 0, 0, 0), sx, sy);
+    }
+
+    public void close() {
+        setVisible(false);
+        owner.remove(this);
     }
 
     /*public boolean handleEvent(Event evt)

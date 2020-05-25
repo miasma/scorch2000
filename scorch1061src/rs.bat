@@ -1,0 +1,1 @@
+java -cp ScorchServer.jar;Scorch.jar ScorchServer.ScorchServer

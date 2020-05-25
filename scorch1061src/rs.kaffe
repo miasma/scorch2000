@@ -1,0 +1,2 @@
+/usr/local/bin/kaffe -classpath Scorch.jar:ScorchServer.jar:/usr/local/share/kaffe/Klasses.jar ScorchServer.ScorchServer
+

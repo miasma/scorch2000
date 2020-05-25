@@ -1,0 +1,21 @@
+Scorched Earth 2000 v1.060, 03/23/2001
+Copyright (C) 1999-2001 KAOS Software
+
+Scorched Earth 2000 comes with ABSOLUTELY NO WARRANTY;
+This is free software, and you are welcome to redistribute it
+under certain conditions. Please go to the "System" menu,
+"About Scorch", "License" for details or view the COPYING file.
+
+SERVER INSTALLATION:
+to run the scorch server you will need two JAR files:
+Scorch.jar and ScorchServer.jar
+On Windows run the rs.bat file. On Unix run rs (or rs.kaffe if you use
+kaffe) script. You may need to edit those scripts to supply correct paths.
+For the best results on FreeBSD and Linux use kaffe 1.0.5
+
+After the server is running, you can play on the same computer but just
+opening 800x600.html or 1024x768.html locally with either appletviewer or 
+browser. If you want to allow other people use your server you will need a
+web server running on this machine. Please note that web server must run
+on the same machine where ScorchServer runs. Java Applets can connect only
+to the host which served the html files.

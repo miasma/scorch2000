@@ -1,0 +1,36 @@
+Instructions on creating new weapon for Scorched Earth 2000
+draft
+Mikhail Kruk
+20/02/2001
+
+                  
+new class in the weapons package must be created with the
+name of weapon you want to add. It must extend class Weapon
+and (usually) contains just the constructor which looks
+like: (let's say you are creating weapon called MyWeapon)
+                  
+type = MyWeapon;
+price = [integer];
+argument = [any constant you might need or nothing];
+explosionClass = "MyWeaponExplosion";
+
+Now you go to file Weapon.java and add two things here:
+pubic static final int MyWeapon = [some number which is not
+yet used by other weapons]
+and add string to the array names. This string will be "My
+Weapon" and it will be displayed as the name of new weapon.
+At the same time it will be expected that class has the same
+name. Spaces will be omitted.
+Now you have to create class MyWeaponExplosion which is kind
+of hard to explain, look just at the other explosion
+classes, they are fairly short and can be understood.
+Now if you have created a new explosion which can be used
+for tank death sequence (unlike roller or digger explosions)
+you should go to ScorchField.java and change randomExplosion
+method. 
+
+Now there is one more thing: if you've added some kind of
+really weird weapon which behaves unlike MIRV-style missiles
+and unlike generic missiles you will need to write new
+missile class (extends GenericMissile) and edit method fire
+in class ScorchField to use the apropriate missile class.

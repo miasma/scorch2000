@@ -31,25 +31,22 @@ public class ScorchServer
     public static final String 
 	version = "Scorched Earth 2000 Server, v1.271, 07/26/2000";
 
-    private Socket accept = null;
     private ServerSocket s_socket = null;
-    private int port;
+    private final int port;
     private static int game_count = 0;
     public static int potentialDesyncCount = 0;
     
     //all the games on the server
-    private static Vector games = new Vector();
+    private static final Vector<Game> games = new Vector<>();
     //responsible for profile storage and lookup
     private static Disk disk = null;
-    private static Vector topTen = new Vector();
-    //can modify top ten to top 'any other number'
-    private static int topX = 10;
+    private static final Vector<PlayerProfile> topTen = new Vector<>();
 
     public static void main(String[] args)
     {
 	disk = new Disk();
-	ScorchServer ss = null;
-	ServerShell shell = null;
+	ScorchServer ss;
+	ServerShell shell;
 
 	System.out.println(version+"\n");
 	System.out.println
@@ -86,12 +83,12 @@ public class ScorchServer
     //check if a player is allready participating in some game
     public static synchronized boolean alreadyPlaying(String name)
     {
-	Game g = null;
+	Game g;
 
 	//see if the player is already logged into one of the games
 	for (int i = 0; i < games.size(); i++)
 	    {
-		g = (Game)games.elementAt(i);
+		g = games.elementAt(i);
 		if (g.alreadyPlaying(name))
 		    return true;
 	    }
@@ -134,21 +131,20 @@ public class ScorchServer
 
     public static String allGamesToString()
     {
-	String all = "";
-	Game g = null;
+	StringBuilder all = new StringBuilder();
+	Game g;
 	int multi_player = 0;
 	
 	for (int i = 0; i < games.size(); i++)
 	    {
-		g = (Game)games.elementAt(i);
+		g = games.elementAt(i);
 		if (g.getHumanCount() > 1)  multi_player++;
-		all = all + g + "\n";
+		all.append(g).append("\n");
 	    }
 	
-	all += "Total of " + games.size() + " games, " + multi_player +
-	    " multiplayer.\n\n";
+	all.append("Total of ").append(games.size()).append(" games, ").append(multi_player).append(" multiplayer.\n\n");
 
-	return all;
+	return all.toString();
     }
 
     public static int getDesyncCount()
@@ -167,7 +163,7 @@ public class ScorchServer
 
 	for (int i = 0; i < games.size(); i++)
 	    {
-		g = ((Game)games.elementAt(i));
+		g = games.elementAt(i);
 		if (g.getID() == index)
 		    return g;
 	    }
@@ -182,11 +178,11 @@ public class ScorchServer
 
     public static Player findPlayerByName( String name )
     {
-	Player pl = null;
+	Player pl;
 
 	for (int i = 0; i < games.size(); i++)
 	    {
-		pl = ((Game)games.elementAt(i)).findPlayerByName(name);
+		pl = games.elementAt(i).findPlayerByName(name);
 		if (pl != null)
 		    return pl;
 	    }
@@ -204,20 +200,22 @@ public class ScorchServer
 
 	for (int i = 0; i < topTen.size(); i++)
 	    if (profile.getName().equals
-		(((PlayerProfile)topTen.elementAt(i)).getName()))
+		(topTen.elementAt(i).getName()))
 		topTen.removeElementAt(i);
 
-	while (position<topX && position < topTen.size())
+        //can modify top ten to top 'any other number'
+        int topX = 10;
+        while (position< topX && position < topTen.size())
 	    {
 		if (profile.getOverallGain() > 
-		    ((PlayerProfile)topTen.elementAt
-		     (position)).getOverallGain())
+		    topTen.elementAt
+		     (position).getOverallGain())
 		    break;
 		
 		position++;
 	    }
 
-	if (position == topTen.size() && !(position<topX) )
+	if (position == topTen.size() && !(position< topX) )
 	    return;
 
 	//System.out.println("Inserting " + profile.getName() + " at " + position);
@@ -230,13 +228,12 @@ public class ScorchServer
 
     public static String getTopTen()
     {
-	String result = Protocol.topten + Protocol.separator;
+	StringBuilder result = new StringBuilder(Protocol.topten + Protocol.separator);
 
 	for (int i = 0; i < topTen.size(); i++)
-	    result = result + ((PlayerProfile) topTen.elementAt(i)) +
-		Protocol.separator;
+	    result.append(topTen.elementAt(i)).append(Protocol.separator);
 	
-	return result;
+	return result.toString();
     }
 
     //register a logged in player. essentially adds a player to a game he 
@@ -244,12 +241,12 @@ public class ScorchServer
     //player can only participate in the game that matches his resolution
     public static Game register(ServerThread player, String resolution)
     {
-	Game g = null;
+	Game g;
 	
 	//find an emtpy game and add the player to it.
 	for (int i = 0; i < games.size(); i++)
 	    {	    
-		g = (Game)games.elementAt(i);
+		g = games.elementAt(i);
 		if (g.reserveSpot(resolution))
 		    {
 			g.addPlayer(player, Protocol.loggedin);
@@ -272,7 +269,7 @@ public class ScorchServer
     public static void broadcast( String msg )
     {
 	for (int i = 0; i < games.size(); i++)
-	    ((Game)games.elementAt(i)).broadcast( msg );
+	    games.elementAt(i).broadcast( msg );
     }
 
     //stop listening for connection
@@ -307,9 +304,9 @@ public class ScorchServer
 		while (true)
 		    {
 			//System.out.println("SERVER: accepting on port "+port);
-			accept = s_socket.accept();
+                Socket accept = s_socket.accept();
 
-			st = new ServerThread(accept);
+			new ServerThread(accept);
 
 			Thread.yield();
 		    }
@@ -323,7 +320,7 @@ public class ScorchServer
 	try 
 	    {
 		while( games.size() > 0 )
-		    Thread.currentThread().sleep( 1000 );
+		    Thread.sleep( 1000 );
 	    }
 	catch (Exception e)
 	    {}

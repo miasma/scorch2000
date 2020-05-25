@@ -67,25 +67,24 @@ public class Debug
     
     public static void printStack(Thread thread)
     {
-	thread.dumpStack();
+	Thread.dumpStack();
     }
 
     public static void printThreads()
     {
 	Thread[] threads = new Thread[Thread.activeCount()];
 	Thread.enumerate(threads);
-	for(int i = 0; i < threads.length; i++)
-	    {
-		System.out.println("/t/t"+threads[i]);
-		printStack(threads[i]);
-	    }
+		for (Thread thread : threads) {
+			System.out.println("/t/t" + thread);
+			printStack(thread);
+		}
     }
 
     public static void pause(int ms)
     {
 	try
 	    {
-		Thread.currentThread().sleep(ms);
+		Thread.sleep(ms);
 	    }
 	catch(Exception e)
 	    {
@@ -151,9 +150,9 @@ public class Debug
 
 class Console extends Frame implements FocusListener, ActionListener
 {
-    private TextArea textArea;
-    private TextField textField;
-    private Network network;
+    private final TextArea textArea;
+    private final TextField textField;
+    private final Network network;
 
     public Console(Network network)
     {
@@ -213,7 +212,7 @@ class Console extends Frame implements FocusListener, ActionListener
 	textArea.append(s+"\n");
     }
 
-    class wndListener extends WindowAdapter
+    static class wndListener extends WindowAdapter
     {
 	public void windowClosing(WindowEvent e)
 	{

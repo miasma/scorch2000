@@ -13,12 +13,12 @@ public class GameSettings
 {
     public static final int NO_WIND = 1, CONST_WIND = 0, CHANGING_WIND = 2;
 
-    public float gravity;
-    public int maxRounds;
-    public boolean hazards;
-    public int wind;
-    public long initialCash;
-    public boolean lamerMode;
+    public final float gravity;
+    public final int maxRounds;
+    public final boolean hazards;
+    public final int wind;
+    public final long initialCash;
+    public final boolean lamerMode;
 
     public GameSettings(float g, int m, boolean h, int w, long c, boolean lm)
     {

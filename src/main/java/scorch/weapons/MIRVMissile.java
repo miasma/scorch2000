@@ -7,14 +7,12 @@ package scorch.weapons;
   creates a number of particles which fall on the ground and explode
 */
 
-import java.awt.*;
-
 import scorch.*;
 	            
 public class MIRVMissile extends GenericMissile
 {
     // Missile sprite
-    private final static int data[][]=
+    private final static int[][] data =
     {
 	{0,b,b,0},
 	{b,b,w,b},

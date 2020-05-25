@@ -10,7 +10,6 @@ package scorch.weapons;
 */
 
 import scorch.*;
-import java.util.Random;
 
 import java.awt.*;
 
@@ -55,7 +54,7 @@ public class SimpleExplosion extends RoundExplosion
     public void setArgument(int arg)
     {
 	radius = arg;
-	step = c/radius;
+	step = 1f*c/radius;
     }
 
     public boolean drawNextFrame(boolean update)
@@ -97,7 +96,7 @@ public class SimpleExplosion extends RoundExplosion
 	    case (DRAW):
 		bitmap.setDensity(step);
 		bitmap.setColor
-		    (new Color((int)(255*(float)(1-rd)),0,0));
+		    (new Color((int)(255* (1-rd)),0,0));
 		
 		bitmap.fillCircle(x,y,radius);
 		bitmap.newPixels(x-radius,y-radius,

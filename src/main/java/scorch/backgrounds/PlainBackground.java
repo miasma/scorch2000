@@ -11,7 +11,7 @@ import java.awt.Color;
 
 public class PlainBackground extends Background
 {
-    private int color;
+    private final int color;
 
     public PlainBackground(int width, int height, Color color)
     {

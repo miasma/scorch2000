@@ -7,21 +7,17 @@ package scorch.backgrounds;
   Description: the night stars background.
 */
 
-import java.awt.Color;
 import java.util.Random;
 
 public class StarsBackground extends Background
 {
-    private int[] stars;
-    private Random rand;
+    private final int[] stars;
 
-    public StarsBackground(int width, int height, Random rand)
+	public StarsBackground(int width, int height, Random rand)
     {
 	super(width, height);
 
-        this.rand = rand; 
-
-	stars = new int[width];
+		stars = new int[width];
 	
 	for(int i = 0; i < width; i++)
 	    {
@@ -44,6 +40,6 @@ public class StarsBackground extends Background
 	if( stars[x] == y )
 	    return (255 << 24) | (i << 16) | (i << 8) | i;
 	else
-	    return (255 << 24) | (0 << 16) | (0 << 8) | 0;
+	    return (255 << 24);
     }
 }

@@ -20,16 +20,18 @@ public class GenericMissile extends PhysicalObject implements Explodable
     protected final static int b = Color.black.getRGB();
     protected final static int w = Color.white.getRGB();
 
-    protected Explosion explosion;
+    protected final Explosion explosion;
 
-    protected int width, height;
+    protected final int width;
+    protected final int height;
     protected int prev_x = -1, prev_y = -1;
     protected Color tracer = null;
     protected ExplosionInfo IE = null;
     protected int frameNum = 0;
-    protected int missile[][];
+    protected final int[][] missile;
 
-    protected int xt[], yt[]; // trajectory arrays
+    protected final int[] xt;
+    protected final int[] yt; // trajectory arrays
     protected int step = 0;
     private final int numSteps = 50;
 

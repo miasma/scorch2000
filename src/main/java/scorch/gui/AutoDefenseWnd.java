@@ -12,7 +12,6 @@ import java.awt.event.*;
 
 import scorch.*;
 import scorch.items.*;
-import swindows.*;
 
 public class AutoDefenseWnd extends Inventory
 {
@@ -33,6 +32,5 @@ public class AutoDefenseWnd extends Inventory
     {
 	((ScorchApplet)owner).sendEOT("AutoDefense");
 	close();
-	return;
     }
 }

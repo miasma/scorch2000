@@ -9,7 +9,8 @@ package scorch.backgrounds;
 
 public abstract class Background
 {
-    public int width, height;
+    public final int width;
+    public final int height;
    
     public Background(int width, int height)
 	{

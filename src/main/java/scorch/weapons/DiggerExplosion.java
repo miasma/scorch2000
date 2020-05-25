@@ -26,7 +26,8 @@ public class DiggerExplosion extends Explosion
     private int frameNum = 0, minX = Integer.MAX_VALUE, maxX = 0, 
 	minY = Integer.MAX_VALUE, maxY = 0;
 
-    private int[] xcoords = new int[num], ycoords = new int[num];
+    private final int[] xcoords = new int[num];
+    private final int[] ycoords = new int[num];
     private ExplosionInfo EI;
     private int duration;
     

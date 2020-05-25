@@ -13,7 +13,7 @@ public class lg extends shellCommand
     public static String help = "To list the current games";
 
     //arguments are ignored here for now.
-    public static void run(Vector args, Object owner)
+    public static void run(Vector<String> args, Object owner)
     {
 	((ServerShell)owner).print(ScorchServer.allGamesToString());
     }

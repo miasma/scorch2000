@@ -6,9 +6,6 @@ package scorch.items;
   Description: 
 */
 
-import scorch.utility.*;
-import scorch.ScorchApplet;
-
 public class HeavyShield extends Shield
 {
     public HeavyShield()

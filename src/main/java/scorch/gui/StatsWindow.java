@@ -23,14 +23,14 @@ public class StatsWindow extends sWindow
 	IG = 2,  // in game
 	TT = 3;  // top ten
 
-    private int type;
+    private final int type;
 
     public StatsWindow(int type, ScorchApplet owner)
     {
 	this(type, owner.getPlayers(), owner);
     }
     
-    public StatsWindow(int type, Vector players, ScorchApplet owner)
+    public StatsWindow(int type, Vector<?> players, ScorchApplet owner)
     {
 	super(-1,-1,0,0,"Players Statistics", owner);
 
@@ -153,7 +153,7 @@ public class StatsWindow extends sWindow
 	return false;
     }
 
-    private Panel buildPlayersTable(Vector players)
+    private Panel buildPlayersTable(Vector<?> players)
     {
 	String ts;
 	PlayerProfile spp;

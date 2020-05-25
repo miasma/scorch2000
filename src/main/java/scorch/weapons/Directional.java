@@ -9,5 +9,5 @@ package scorch.weapons;
 
 public interface Directional
 {
-    public abstract void setSpeed(double speed);
+    void setSpeed(double speed);
 }

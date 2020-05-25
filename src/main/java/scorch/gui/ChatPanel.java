@@ -10,21 +10,18 @@ package scorch.gui;
 import java.awt.*;
 
 import scorch.*;
-import scorch.utility.*;
 import swindows.*;
 
 public class ChatPanel extends sWindow
 {
-    private TextArea chatArea;
-    private TextField chatMessage;
 
-    public ChatPanel(int x, int y, int w, int h, ScorchApplet owner)
+	public ChatPanel(int x, int y, int w, int h, ScorchApplet owner)
     {
 	super(x,y,w,h,"Scorched Earth 2000 Chat", owner);
 
-	chatArea = new TextArea();
+		TextArea chatArea = new TextArea();
 	chatArea.setEditable(false);
-	chatMessage = new TextField();
+		TextField chatMessage = new TextField();
 
 	setLayout(new BorderLayout());
 	add(chatArea, BorderLayout.CENTER);

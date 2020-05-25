@@ -10,13 +10,12 @@
 package scorch.weapons;
 
 import java.awt.Rectangle;
-import java.util.Random;
 
 import scorch.Bitmap;
 
 public class SandExplosion extends Explosion
 {
-    public static int MAX_HEIGHT = 250;
+    public static final int MAX_HEIGHT = 250;
 
     private int sand = -1;          // sand color
     private int current_size=3;     // line length

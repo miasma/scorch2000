@@ -17,15 +17,18 @@ import swindows.*;
 public class GameOptions extends PlayersList implements ActionListener,
 							FocusListener
 {
-    private TextField gravity, cash, rounds;
+    private final TextField gravity;
+	private final TextField cash;
+	private final TextField rounds;
     private int roundsVal = 5;
     private long cashVal = 0;
     private float gravityVal = Physics.EARTH_GRAVITY;
-    private Choice wind;
-    private TankSelection tankSelection;
-    private Checkbox hazards, sounds, lamermode;
-    private boolean master;
-    private PlayerProfile profile;
+    private final Choice wind;
+    private final TankSelection tankSelection;
+    private final Checkbox hazards;
+	private final Checkbox sounds;
+	private final Checkbox lamermode;
+    private final PlayerProfile profile;
 
     public GameOptions(String masterName, int maxpl, 
 		       PlayerProfile profile, ScorchApplet owner)
@@ -71,8 +74,7 @@ public class GameOptions extends PlayersList implements ActionListener,
 	sounds.setState(profile.getSounds());
 	lamermode.setState(false);
 
-	this.master = master;
-	this.profile = profile;
+        this.profile = profile;
 
 	Panel p0, p1, p2, p3, p2a, p2b, p2c, p4, p3a, p3b, p2d;
 
@@ -203,7 +205,7 @@ public class GameOptions extends PlayersList implements ActionListener,
 		try
 		    {
 			gravityVal = 
-			    new Float(gravity.getText()).floatValue();
+			    Float.parseFloat(gravity.getText());
 		    }
 		catch(NumberFormatException e)
 		    {
@@ -277,7 +279,7 @@ public class GameOptions extends PlayersList implements ActionListener,
 	    {
 		if( players.getItemCount() < 2 )
 		    {
-			String b[] = {"OK"};
+			String[] b = {"OK"};
 			MessageBox msg = new MessageBox
 			    ("Error", "Can not start game without opponents", 
 			     b, null, owner, this);
@@ -303,7 +305,6 @@ public class GameOptions extends PlayersList implements ActionListener,
 	if( cmd.equals("Cancel Game") )
 	    {
 		((ScorchApplet)owner).Quit();
-		return;
-	    }
+		}
     }
 }

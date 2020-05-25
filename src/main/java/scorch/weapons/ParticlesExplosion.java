@@ -20,9 +20,8 @@ public abstract class ParticlesExplosion extends Explosion
     private static final int START = 0, FLYING = 1, EXPLODING = 2, END = 3;
 
     private int state = START;
-    protected Vector particles, exp_particles;
+    protected Vector<GenericMissile> particles, exp_particles;
     protected boolean delayExplosions = true;
-    private ExplosionInfo ei;
 
     private int lx = Integer.MAX_VALUE, uy = Integer.MAX_VALUE, rx = 0, ly = 0;
 
@@ -46,9 +45,9 @@ public abstract class ParticlesExplosion extends Explosion
     public void setArgument(int arg)
     {
 	enumber = arg;
-	particles = new Vector(enumber);
-	exp_particles = new Vector(enumber);;
-    }
+	particles = new Vector<>(enumber);
+	exp_particles = new Vector<>(enumber);
+	}
 
     protected abstract void initParticles();
 
@@ -71,7 +70,7 @@ public abstract class ParticlesExplosion extends Explosion
 		int j = 0;
 		while(j < particles.size())
 		    {
-			msl = (GenericMissile)particles.elementAt(j);
+			msl = particles.elementAt(j);
 			if( !msl.isExploding() )
 			    {
 				if( msl.drawNextFrame(true) )
@@ -113,7 +112,7 @@ public abstract class ParticlesExplosion extends Explosion
 		res = false;
 		for(int i = 0; i < particles.size(); i++)
 		    {
-			msl = (GenericMissile)particles.elementAt(i);
+			msl = particles.elementAt(i);
 			res |= msl.drawNextFrame(false);
 		    }
 		bitmap.newPixels(lx, uy, rx-lx+1, ly-uy+1);
@@ -134,11 +133,11 @@ public abstract class ParticlesExplosion extends Explosion
 	for(int i = 0; i < exp_particles.size(); i++)
 	    {
 		if(delayExplosions)
-		    ((GenericMissile)exp_particles.
-		     elementAt(i)).drawFrame(false);
+		    exp_particles.
+		     elementAt(i).drawFrame(false);
 		else
-		    ((GenericMissile)exp_particles.
-		     elementAt(i)).drawNextFrame(false);
+		    exp_particles.
+		     elementAt(i).drawNextFrame(false);
 		    
 	    }
 
@@ -146,7 +145,7 @@ public abstract class ParticlesExplosion extends Explosion
 	    (lx-radius, uy-radius, rx-lx+1+2*radius, ly-uy+1+2*radius);
 
 	for(int i = 0; i < exp_particles.size(); i++)
-	    ((GenericMissile)exp_particles.elementAt(i)).
+	    exp_particles.elementAt(i).
 		hideFrame();
     }
 
@@ -169,7 +168,8 @@ public abstract class ParticlesExplosion extends Explosion
 	// which explode outside the screen
 	int lx = Integer.MAX_VALUE, uy = Integer.MAX_VALUE, rx = 0, ly = 0;
 
-	for(int i = 0; i < particles.size(); i++)
+        ExplosionInfo ei;
+        for(int i = 0; i < particles.size(); i++)
 	    {
 		ei = ((Explodable)particles.elementAt(i)).getExplosionInfo();
 
@@ -178,10 +178,10 @@ public abstract class ParticlesExplosion extends Explosion
 
 		if( ei.explosionArea.x < lx ) lx = ei.explosionArea.x;
 		if( ei.explosionArea.y < uy ) uy = ei.explosionArea.y;
-		if( ei.explosionArea.width+ei.explosionArea.x > rx ) 
-		    rx = ei.explosionArea.width+ei.explosionArea.x;
-		if( ei.explosionArea.height+ei.explosionArea.y > ly ) 
-		    ly = ei.explosionArea.height+ei.explosionArea.y;
+		if( ei.explosionArea.width+ ei.explosionArea.x > rx ) 
+		    rx = ei.explosionArea.width+ ei.explosionArea.x;
+		if( ei.explosionArea.height+ ei.explosionArea.y > ly ) 
+		    ly = ei.explosionArea.height+ ei.explosionArea.y;
 	    }
 
 	if( def )

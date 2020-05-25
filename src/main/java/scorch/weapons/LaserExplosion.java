@@ -16,7 +16,7 @@ import scorch.*;
 public class LaserExplosion extends Explosion
 {
     int width;
-    LaserColorModel pallete;
+    final LaserColorModel pallete;
     long duration=60;
     int yl;
     final static int START=0;
@@ -104,9 +104,9 @@ public class LaserExplosion extends Explosion
 
 class LaserColorModel extends ScorchColorModel
 {
-    protected int r[] = new int[32];
-    protected int g[] = new int[32];
-    protected int b[] = new int[32];
+    protected final int[] r = new int[32];
+    protected final int[] g = new int[32];
+    protected final int[] b = new int[32];
 
     public LaserColorModel(int size)
     {
@@ -126,8 +126,8 @@ class LaserColorModel extends ScorchColorModel
 
     public int getRGB(int pixel){
     	if(pixel<r.length)
-	    return ((((int)255)<<24)|(r[pixel]<<16)|(g[pixel]<<8)|b[pixel]);   
+	    return ((255 <<24)|(r[pixel]<<16)|(g[pixel]<<8)|b[pixel]);
     	else
-	    return ((((int)255)<<24)|(r[r.length-1]<<16)|(g[g.length-1]<<8)|b[b.length-1]);   
+	    return ((255 <<24)|(r[r.length-1]<<16)|(g[g.length-1]<<8)|b[b.length-1]);
     }
 }

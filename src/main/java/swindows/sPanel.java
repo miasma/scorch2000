@@ -14,7 +14,7 @@ public class sPanel extends Panel
     public static final int wndBorder = 3;
 
     protected int width, height, x, y;
-    protected FontMetrics fm = null;
+    protected FontMetrics fm;
     protected int fontHeight;
     
     protected Color bkColor = Color.lightGray,  // default window color

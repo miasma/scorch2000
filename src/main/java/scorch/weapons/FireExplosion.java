@@ -12,13 +12,13 @@ import scorch.*;
 import java.awt.*;
 
 public class FireExplosion extends Explosion{
-    protected FireColorModel pallete;
-    protected int width;
-    protected int height;
+    protected final FireColorModel pallete;
+    protected final int width;
+    protected final int height;
     protected int pixels=0;
     protected float intensity=0;
-    protected int data[];
-    protected int buffer[][];
+    protected final int[] data;
+    protected final int[][] buffer;
     protected int state=0;        
     protected ExplosionInfo ie;
     protected long duration=50;
@@ -75,8 +75,7 @@ public class FireExplosion extends Explosion{
 /***************************************************************/    
     static protected long Random(long min, long max){
 			double rnd=Math.random();
-			long returnValue= Math.round((rnd*(double)(max-min)+(double)min));
-			return returnValue;
+		return Math.round((rnd*(double)(max-min)+(double)min));
 	
     }
 /***************************************************************/
@@ -94,7 +93,7 @@ public class FireExplosion extends Explosion{
     public boolean drawNextFrame(boolean update)
     {
 	pixels=0;
-	int color=0;
+	int color;
 	frameNum++;
 	
 	switch (state)
@@ -307,6 +306,6 @@ class FireColorModel extends ScorchColorModel
 	if(pixel<20)
 	    return 0;
 	else
-	    return ((((int)255)<<24)|(r[pixel]<<16)|(g[pixel]<<8)|b[pixel]);
+	    return ((255 <<24)|(r[pixel]<<16)|(g[pixel]<<8)|b[pixel]);
     }
 }

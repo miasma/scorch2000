@@ -10,6 +10,6 @@ public interface FrameShow
     // has been drawn to let the animation
     // container know when to stop calling this method
     // update specifies whether or not newPixels should be called
-    public abstract boolean drawNextFrame(boolean update);
+    boolean drawNextFrame(boolean update);
 }
 

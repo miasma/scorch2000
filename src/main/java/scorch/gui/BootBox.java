@@ -18,20 +18,19 @@ import swindows.*;
 
 public class BootBox extends sWindow implements ActionListener, KeyListener
 {
-    private Choice players;
 
-    public BootBox(ScorchApplet owner)
+	public BootBox(ScorchApplet owner)
     {
 	super(-1,-1,0,0,"Boot player", owner);
 
-	players = new Choice();
+		Choice players = new Choice();
 	players.addKeyListener(this);
 
-	Vector plrs = owner.getPlayers();
+	Vector<ScorchPlayer> plrs = owner.getPlayers();
 	ScorchPlayer sp;
 	for(int i = 0; i < plrs.size(); i++)
 	    {
-		sp = (ScorchPlayer)plrs.elementAt(i);
+		sp = plrs.elementAt(i);
 		if( !(sp instanceof AIPlayer) )
 		    players.addItem(sp.getName());
 	    }
@@ -82,7 +81,6 @@ public class BootBox extends sWindow implements ActionListener, KeyListener
 	if( "Cancel".equals(cmd) )
 	    {
 		close();
-		return;
-	    }
+        }
     }
 }

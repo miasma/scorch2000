@@ -12,7 +12,9 @@ package scorch;
             
 abstract public class PhysicalObject extends Audible
 {
-    protected int x, y, weight;
+    protected int x;
+    protected int y;
+    protected final int weight;
     protected Bitmap bitmap;
     protected Physics physics;
     protected ScorchApplet scorchApplet;

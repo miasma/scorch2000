@@ -16,10 +16,10 @@ public class boot extends shellCommand
     public static String help = "To boot a person with PlayerID from game GameID.";
 
     //arguments are ignored here for now.
-    public static void run(Vector args, Object owner)
+    public static void run(Vector<String> args, Object owner)
     {
 	ServerShell shell = (ServerShell)owner;
-	String message = "";
+	StringBuilder message = new StringBuilder();
 	
 	if (args.size() < 2)
 	    {
@@ -31,19 +31,19 @@ public class boot extends shellCommand
 	    {
 		g = ScorchServer.findGameByID
 		    ( Integer.parseInt
-		      ( args.elementAt(0).toString())); 
+		      (args.elementAt(0)));
 
 		p = g.findPlayerByID
 		    ( Integer.parseInt
-		      ( args.elementAt(1).toString())); 
+		      (args.elementAt(1)));
 
 		if (args.size() == 2)
 		    p.dropPlayer("one of the developers didn't like you very much");
 		else
 		    {
 		        for (int i = 2; i < args.size(); i++)
-			    message = message + " " + args.elementAt(i);
-			p.dropPlayer(message);
+			    message.append(" ").append(args.elementAt(i));
+			p.dropPlayer(message.toString());
 		    }
 	    }
 	catch( Exception e )

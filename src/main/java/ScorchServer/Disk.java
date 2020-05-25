@@ -18,17 +18,12 @@ import scorch.*;
 public class Disk implements Runnable
 {
     private BufferedReader in;
-    private BufferedWriter out;
-    private String st, fileName;
-    private String table = "players.db";
-    private Hashtable hash = null;
-    private Thread t = null;
-    //the time to wait between checking whether profiles need to be
-    //written to disk.
-    private int WRITE_DELAY = 10000;
-    private boolean changed = false, keep_running = true;
+	private String st, fileName;
+    private final String table = "players.db";
+    private Hashtable<String, PlayerProfile> hash = null;
+	private boolean changed = false, keep_running = true;
 
-    private static String desyncLogFile = "desync.log";
+    private static final String desyncLogFile = "desync.log";
     private static int desyncCount = 0;
 
     //constructor
@@ -52,7 +47,7 @@ public class Disk implements Runnable
 	    in = null;
 	    changed = false;
 
-	    t = new Thread( this );
+		Thread t = new Thread(this);
 	    t.start();
 	}
 	catch(Exception e) {
@@ -75,7 +70,7 @@ public class Disk implements Runnable
 
     public static synchronized void recordGame(Game g, String os, String ns)
     {
-	BufferedOutputStream outBuf = null;
+	BufferedOutputStream outBuf;
 
 	String temp = os + "\n" + ns + "\nSeed: " + g.getSeed() + "\n" + g
 	    + g.getAllHumanPlayersString();
@@ -99,7 +94,7 @@ public class Disk implements Runnable
 
     public static synchronized void recordClientLog(String log, int cl_id)
     {
-	BufferedOutputStream outBuf = null;
+	BufferedOutputStream outBuf;
 
 	try
 	    {
@@ -131,12 +126,12 @@ public class Disk implements Runnable
 
     public synchronized PlayerProfile findProfileByName( String name )
     {
-	Enumeration e = hash.elements();
-	PlayerProfile prof = null;
+	Enumeration<PlayerProfile> e = hash.elements();
+	PlayerProfile prof;
 
 	while( e.hasMoreElements() )
 	    {
-		prof = (PlayerProfile)e.nextElement();
+		prof = e.nextElement();
 		if (prof.getName().equals(name))
 		    return prof;
 	    }
@@ -146,13 +141,13 @@ public class Disk implements Runnable
 
     public synchronized void encryptPasswords()
     {
-	Enumeration e = hash.elements();
+	Enumeration<PlayerProfile> e = hash.elements();
 
 	while( e.hasMoreElements() )
-	    add(((PlayerProfile)e.nextElement()).encrypt());
+	    add(e.nextElement().encrypt());
     }
 
-    public static void main(String args[])
+    public static void main(String[] args)
     {
 	Disk disk = new Disk();
 
@@ -173,18 +168,15 @@ public class Disk implements Runnable
 
     public PlayerProfile getProfile( String user )
     {
-	Object pr;
+		PlayerProfile pr;
 
 	if (user == null)
 	    return null;
 
 	pr = hash.get(user);
 
-	if (pr != null)
-	    return (PlayerProfile)pr;
-
-	return null;
-    }
+		return pr;
+	}
 
     public void remove(String name)
     {
@@ -198,12 +190,12 @@ public class Disk implements Runnable
 
     public void loadTable()
     {
-	String profileString = null;
-	PlayerProfile profile = null;
+	String profileString;
+	PlayerProfile profile;
 	long time = new Date().getTime();
 	int count = 0;
 
-	hash = new Hashtable();
+	hash = new Hashtable<>();
 	
 	try {
 	    //read the profiles from the profile file.
@@ -228,19 +220,22 @@ public class Disk implements Runnable
     //public void writeTable()
     public void run()
     {
-	Enumeration hashKeys = null;
-	String elt = null;
+	Enumeration<String> hashKeys;
+	String elt;
 
 	while( keep_running ) {
 	    try 
 		{
-		    
-		    while (!changed)
-			Thread.currentThread().sleep(WRITE_DELAY);
+
+			//the time to wait between checking whether profiles need to be
+			//written to disk.
+			int WRITE_DELAY = 10000;
+			while (!changed)
+			Thread.sleep(WRITE_DELAY);
 		    synchronized (this) {
 			//create a new stream (and thus empty the file?)
-			out = new BufferedWriter(new OutputStreamWriter
-			    (new FileOutputStream(table)));
+				BufferedWriter out = new BufferedWriter(new OutputStreamWriter
+						(new FileOutputStream(table)));
 			
 			if (hash != null) {
 			    hashKeys = hash.keys();
@@ -248,11 +243,11 @@ public class Disk implements Runnable
 			    long time = new Date().getTime();
 			    
 			    while (hashKeys.hasMoreElements()) {
-				elt = ((PlayerProfile)hash.get
-				       ((String)hashKeys.nextElement())) +"";
+				elt = hash.get
+				       (hashKeys.nextElement()) +"";
 				out.write(elt, 0, elt.length());
 				out.write('\n');
-				Thread.currentThread().yield();
+				Thread.yield();
 			    }
 			    out.flush();
 			    out.close();

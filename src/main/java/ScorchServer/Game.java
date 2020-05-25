@@ -19,13 +19,13 @@ import scorch.Protocol;
 
 public class Game
 {
-    private Vector players;        //the list of participating players
-    private Vector dead_pl;        //the list of players dead in this round
-    private Vector players_left;   //the list of players who left this round
+    private final Vector<Player> players;        //the list of participating players
+    private final Vector<Player> dead_pl;        //the list of players dead in this round
+    private final Vector<Player> players_left;   //the list of players who left this round
     private int turn = 0;                 //who's turn it is right now
-    private Player turn_order[] = null;   //the order in which players go.
+    private Player[] turn_order = null;   //the order in which players go.
     private int num_rounds, total_rounds;
-    private int id;
+    private final int id;
     //player count is initially one because a check for available spots
     //only occurs when a game already exists. i.e. a new game is not
     //checked and the player_count is not incremented for the master
@@ -37,7 +37,7 @@ public class Game
     //can_join is a flag that is set to false when the master has started
     //the game.  initialized set to true when all player options are received
     //game over is a flag that is set than the game is left by master
-    private boolean can_join = false, initialized = false, gameover = false;
+    private boolean can_join, initialized = false, gameover = false;
     
     //check if master has already sent mass kill. at the end of the turn 
     //it will be broadcasted.
@@ -49,7 +49,7 @@ public class Game
     private String resolution = null;      //the game resolution
 
     //seed shared by all players for synchronous random generator
-    private long seed;
+    private final long seed;
     
     //DEBUG
     private String check = null, checkSentBy = null;
@@ -65,9 +65,9 @@ public class Game
     public Game(int id)
     {
 	this.id = id;
-	players = new Vector();
-	dead_pl = new Vector();
-	players_left = new Vector();
+	players = new Vector<>();
+	dead_pl = new Vector<>();
+	players_left = new Vector<>();
 	can_join = false;
 	seed = System.currentTimeMillis();
     }
@@ -94,19 +94,19 @@ public class Game
 
     public String getAllHumanPlayersString()
     {
-	String result = "";
+	StringBuilder result = new StringBuilder();
 	Player p;
 	
 	for (int i = 0; i < dead_pl.size() + players.size(); i++)
 	    {
-		p = (Player) ((i >= players.size()) ? 
+		p = (i >= players.size()) ?
 			      dead_pl.elementAt(i-players.size()) :
-			      players.elementAt(i));
+			      players.elementAt(i);
 
 		if (p instanceof ServerThread)
-		    result += p + "\t\tfrom: " + p.getHostName();
+		    result.append(p).append("\t\tfrom: ").append(p.getHostName());
 	    }
-	return result;
+	return result.toString();
     }
 
     //DEBUG
@@ -153,7 +153,7 @@ public class Game
 
 	for (int i = 0; i < players.size(); i++)
 	    {
-		Player st = (Player)players.elementAt(i);
+		Player st = players.elementAt(i);
 		if (st.getOptions() == null)
 		    return;
 	    }
@@ -164,7 +164,7 @@ public class Game
 	initialized = true;
 
 	for (int i = 0; i < players.size(); i++)
-	    broadcast(((Player)players.elementAt(i)).getOptions());
+	    broadcast(players.elementAt(i).getOptions());
 
 	broadcast(gameoptions + Protocol.separator + getSeed());
     }
@@ -183,7 +183,7 @@ public class Game
 	//are ready for the next turn (returns if at least one isn't)
 	for (int i = 0; i < players.size(); i++)
 	    {
-		st = (Player)players.elementAt(i);
+		st = players.elementAt(i);
 		//System.out.println(" status " + st.isReady());
 		if (!st.isReady())
 		    return;
@@ -193,7 +193,7 @@ public class Game
 	//ready for the next turn (the dead players still see everything)
 	for (int i = 0; i < dead_pl.size(); i++)
 	    {
-		st = (Player)dead_pl.elementAt(i);
+		st = dead_pl.elementAt(i);
                 //System.out.println(" status " + st.isReady());
 		if (!st.isReady())
 		    return;
@@ -201,7 +201,7 @@ public class Game
 
 	for (int i = 0; i < players_left.size(); i++)
 	    broadcast(Protocol.playerleft + Protocol.separator
-		      + ((Player)players_left.elementAt(i)).getID());
+		      + players_left.elementAt(i).getID());
 
 	players_left.removeAllElements();
 
@@ -211,7 +211,7 @@ public class Game
 	if (players.size() < 2)
 	    {
 		if ((dead_pl.size() == 0) && (players.size() == 1))
-		    ((Player)players.elementAt(0)).dropPlayer
+		    players.elementAt(0).dropPlayer
 			("you are the only player left.");
 		else
 		    endRound();
@@ -230,17 +230,16 @@ public class Game
 		broadcast(Protocol.masskill);
 		massKill = false;
 		//DEBUG
-		check = null;
-	    }
+		}
 	else
 	    //tell clients who makes the next turn
 	    {
 		broadcast(Protocol.maketurn + Protocol.separator + 
 			  turn_order[turn].getID());
+		}
 		check = null;
-	    }
-	
-	//new turn started, set the ready flags to false
+
+		//new turn started, set the ready flags to false
 	setReadyFlags(false);
     }
 
@@ -249,10 +248,10 @@ public class Game
     private void setReadyFlags(boolean value)
     {
 	for (int i = 0; i < players.size(); i++)
-	    ((Player)players.elementAt(i)).setReady(value);
+	    players.elementAt(i).setReady(value);
 
 	for (int i = 0; i < dead_pl.size(); i++)
-	    ((Player)dead_pl.elementAt(i)).setReady(value);
+	    dead_pl.elementAt(i).setReady(value);
     }
 
     //see if a player is already participating in the game
@@ -260,7 +259,7 @@ public class Game
     {
 	for (int i = 0; i < players.size(); i++)
 	    {
-		Player st = (Player)players.elementAt(i);
+		Player st = players.elementAt(i);
 		if (st.getName().equals(name))
 		    return true;
 	    }
@@ -284,7 +283,7 @@ public class Game
 	resurrectPlayers();
 	while (players.size() > 0)
 	    {
-		Player st = (Player)players.elementAt(0);
+		Player st = players.elementAt(0);
 		if (st != null)
 		    {
 			player_count--;
@@ -303,7 +302,7 @@ public class Game
     public synchronized void gameStarted()
     {
 	//int human_count = 0;
-	Player pl = null;
+	Player pl;
 	can_join = false;
 
 	start_time = System.currentTimeMillis();
@@ -313,7 +312,7 @@ public class Game
 	//fill in the ids of players (in random order) to the turn_order array
 	for (int i = 1; i <= players.size(); i++)
 	    {
-		pl = (Player)(players.elementAt( (i*37) % players.size() ));
+		pl = players.elementAt( (i*37) % players.size() );
 		turn_order[i-1] = pl;
 		if (pl instanceof ServerThread)
 		    human_count++;
@@ -364,7 +363,7 @@ public class Game
 	//introduce player lookup by id??
 	for (int i = 0; i < players.size(); i++)
 	    {
-		st = (Player)players.elementAt(i);
+		st = players.elementAt(i);
 		if (st.getID() == dead_player)
 		    {
 			players.removeElement(st);
@@ -378,7 +377,7 @@ public class Game
     //return the players from the 'dead' vector to the regular list.
     private void resurrectPlayers()
     {
-	Object st;
+	Player st;
 
 	while (dead_pl.size() > 0)
 	    {
@@ -470,7 +469,7 @@ public class Game
 		//single left client is disconnected.
 		//note that if can join is true, players are still gathering
 		if ( !can_join && (dead_pl.size() + players.size()) == 1)
-		    ((Player)players.elementAt(0)).dropPlayer
+		    players.elementAt(0).dropPlayer
 			("you are the only player left.");
 		else
 		    //if there is 1 or 0 living players - end the round
@@ -486,13 +485,13 @@ public class Game
 	
 	for (int i = 0; i < players.size(); i++)
 	    {
-		st = (Player)players.elementAt(i);
+		st = players.elementAt(i);
 		if (st != null)
 		    st.sendMessage(msg);
 	    }
 	for (int i = 0; i < dead_pl.size(); i++)
 	    {
-		st = (Player)dead_pl.elementAt(i);
+		st = dead_pl.elementAt(i);
 		if (st != null)
 		    st.sendMessage(msg);
 	    }
@@ -512,7 +511,7 @@ public class Game
 	//notify you about the players that logged in before you
 	for (int i = 0; i < players.size(); i++)
 	    {
-		Player pl = ((Player)players.elementAt(i));
+		Player pl = players.elementAt(i);
 		//if this is not you, you need to know about him/her
 		if (pl.getID() != player.getID())
 		    player.sendMessage
@@ -528,9 +527,9 @@ public class Game
 
 	for (int i = 0; i < dead_pl.size() + players.size(); i++)
 	    {
-		p = (Player) ((i >= players.size()) ? 
+		p = (i >= players.size()) ?
 			      dead_pl.elementAt(i-players.size()) :
-			      players.elementAt(i));
+			      players.elementAt(i);
 
 		if (p.getID() == index)
 		    return p;
@@ -545,9 +544,9 @@ public class Game
 
 	for (int i = 0; i < dead_pl.size() + players.size(); i++)
 	    {
-		p = (Player) ((i >= players.size()) ? 
+		p = (i >= players.size()) ?
 			      dead_pl.elementAt(i-players.size()) :
-			      players.elementAt(i));
+			      players.elementAt(i);
 
 		if (p.getName().equals(name))
 		    return p;
@@ -565,20 +564,21 @@ public class Game
     
     public String toString()
     {
-	String humans = "", AIs = "";
-	Player p;
+        /*(((ServerThread)p).isMaster() ? "*" : "")+*/
+        StringBuilder humans = new StringBuilder();
+        StringBuilder AIs = new StringBuilder();
+        Player p;
 	long lapsed = System.currentTimeMillis() - start_time;
 
 	for (int i = 0; i < players.size() + dead_pl.size(); i++)
 	    {
-		p = ( (i < players.size()) ? (Player)players.elementAt(i) :
-		      (Player)dead_pl.elementAt(i-players.size()));
+		p = ( (i < players.size()) ? players.elementAt(i) :
+				dead_pl.elementAt(i-players.size()));
 		if (p instanceof AIPlayer)
-		    AIs += p.getName(players) + "("+p.getID()+ ")  ";
+		    AIs.append(p.getName(players)).append("(").append(p.getID()).append(")  ");
 		//human player
 		else
-		    humans += /*(((ServerThread)p).isMaster() ? "*" : "")+*/ 
-			p.getName(players) + "("+p.getID()+")  ";
+		    humans.append(p.getName(players)).append("(").append(p.getID()).append(")  ");
 	    }  
 
 	return ( "Game #"+id+ " Round #" + (total_rounds-num_rounds) + 

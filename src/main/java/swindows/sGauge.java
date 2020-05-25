@@ -8,12 +8,12 @@ package swindows;
 */
 
 import java.awt.*;
-import java.awt.event.*;
 
 public class sGauge extends sPanel
 {
     private double percent;
-    private int value, max;
+    private int value;
+    private final int max;
 
     public sGauge(int value, int max, Container owner)
     {

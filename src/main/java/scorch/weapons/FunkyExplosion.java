@@ -13,7 +13,7 @@ import scorch.*;
 
 public class FunkyExplosion extends ParticlesExplosion
 {
-    private int[] colors = {Bitmap.getColor(255,0,0), 
+    private final int[] colors = {Bitmap.getColor(255,0,0),
 			    Color.orange.getRGB(), 
 			    Color.yellow.getRGB(), 
 			    Bitmap.getColor(0,255,0),
@@ -21,8 +21,6 @@ public class FunkyExplosion extends ParticlesExplosion
 			    Bitmap.getColor(0,0,255)};
 
     private final static int FUNKY_SIZE = 30;
-    
-    private static int offset = 5; // the offset of the trajectories
 
     private Explosion explosion; // store the baby nuke aftershock here
     private int a_radius; // aftershock radius
@@ -50,8 +48,10 @@ public class FunkyExplosion extends ParticlesExplosion
 		power = (int)(Math.abs(rand.nextInt() % 500) / 8.0);
 		angle = 20+Math.abs(rand.nextInt() % 140);
 		angler = (double) angle*Math.PI/180.00;
-		xoffset = (int)(Math.cos(angler)*offset);
-		yoffset = (int)(Math.sin(angler)*offset);
+            // the offset of the trajectories
+            int offset = 5;
+            xoffset = (int)(Math.cos(angler)* offset);
+		yoffset = (int)(Math.sin(angler)* offset);
 		fmsl = new TracerMissile
 		    (bitmap, new Physics(x+xoffset, 
 					 bitmap.getHeight()-y+yoffset, 
@@ -63,7 +63,7 @@ public class FunkyExplosion extends ParticlesExplosion
 	    }
 
 	radius = FUNKY_SIZE;
-	a_radius = (int)Math.round(enumber*10);
+	a_radius = Math.round(enumber*10);
     }
 
     public boolean drawNextFrame(boolean update)
@@ -103,11 +103,11 @@ public class FunkyExplosion extends ParticlesExplosion
 // psychodelic multi-color explosion
 class ColorStripExplosion extends RoundExplosion
 {
-    private int frameNum = 0, numSteps = 6;
-    private int color = Color.red.getRGB();
-    private final int duration = 4*numSteps;
+    private int frameNum = 0;
+	private final int numSteps = 6;
+    private final int color;
 
-    private ExplosionInfo EI;
+	private ExplosionInfo EI;
     
     public ColorStripExplosion(Bitmap bitmap, Random rand, 
 			       int x, int y, int r, int color)
@@ -154,8 +154,9 @@ class ColorStripExplosion extends RoundExplosion
     public boolean drawNextFrame(boolean update)
     {
 	drawFrame(update);
-	
-	if( frameNum++ >= duration )
+
+		int duration = 4 * numSteps;
+		if( frameNum++ >= duration)
 	    {
 		bitmap.setColor(null);
 		bitmap.fillCircle(x, y, radius);

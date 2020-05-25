@@ -19,16 +19,16 @@ public class Network implements Runnable
     private Socket acc;
     private Thread listener;
     private BufferedReader is;
-    private PrintWriter os;
-    private int pcount=0;
-    private ScorchApplet owner;
+    private final PrintWriter os;
+    private final int pcount=0;
+    private final ScorchApplet owner;
     
-    private boolean listen = true;
+    private boolean listen;
     
     private int port;
     
     public Network(String host, int port, ScorchApplet owner) 
-	throws UnknownHostException, IOException
+	throws IOException
     {
 	this.owner = owner;
 	
@@ -200,12 +200,12 @@ public class Network implements Runnable
 		    {
 			owner.recieveGameSettings
 			    (new GameSettings
-				(new Float(st.nextToken()).floatValue(),
+				(Float.parseFloat(st.nextToken()),
 				 Integer.parseInt(st.nextToken()),
-				 new Boolean(st.nextToken()).booleanValue(),
+						Boolean.parseBoolean(st.nextToken()),
 				 Integer.parseInt(st.nextToken()),
 				 Long.parseLong(st.nextToken()),
-				 new Boolean(st.nextToken()).booleanValue()),
+						Boolean.parseBoolean(st.nextToken())),
 			     Long.parseLong(st.nextToken()));
 			continue;
 		    }
@@ -218,8 +218,8 @@ public class Network implements Runnable
 		if(command.equals(Protocol.setplayeroptions))
 		    {
 			owner.recievePlayerOptions
-			    (new Integer(st.nextToken()).intValue(),
-			     new Integer(st.nextToken()).intValue());
+			    (Integer.parseInt(st.nextToken()),
+						Integer.parseInt(st.nextToken()));
 			continue;
 		    }
 		if(command.equals(Protocol.disconnect))
@@ -267,7 +267,7 @@ public class Network implements Runnable
 		    }
 		if(command.equals(Protocol.topten))
 		    {
-			Vector profiles = new Vector();
+			Vector<PlayerProfile> profiles = new Vector<>();
 			while(st.hasMoreTokens())
 			    profiles.addElement(new PlayerProfile(st));
 			owner.showTopTen(profiles);

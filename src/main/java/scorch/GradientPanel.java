@@ -6,13 +6,15 @@ package scorch;
   Description: currently not used...
 */
 
-import java.awt.Color;
 import java.awt.*;
 
 public class GradientPanel extends Panel implements Runnable
 {
-    private int steps = 21, current = 0, stripWidth, stripHeight;
-    private int[] colors;
+    private final int steps = 21;
+	private int current = 0;
+	private int stripWidth;
+	private int stripHeight;
+    private final int[] colors;
     private Image backBuffer;
     private Graphics backBufferG;
     private boolean animate = true;
@@ -22,10 +24,8 @@ public class GradientPanel extends Panel implements Runnable
 	super();
 
 	setSize(w, h);
-	
-	this.steps = steps;
-	
-	int red1, red2, green1, green2, blue1, blue2;
+
+		int red1, red2, green1, green2, blue1, blue2;
 	int i;
 
 	red1 = color1.getRed();
@@ -58,7 +58,7 @@ public class GradientPanel extends Panel implements Runnable
 		backBuffer = createImage(d.width, d.height);
 		backBufferG = backBuffer.getGraphics();
 
-		stripWidth = Math.round(d.width / (steps*2));
+		stripWidth = Math.round(d.width / (steps*2f));
 		stripHeight = d.height;
 
 		Thread th = new Thread(this, "gradient-thread");
@@ -86,7 +86,7 @@ public class GradientPanel extends Panel implements Runnable
 	    {
 		try
 		    {
-			Thread.currentThread().sleep(100);
+			Thread.sleep(100);
 		    }
 		catch(InterruptedException e)
 		    {}

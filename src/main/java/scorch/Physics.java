@@ -26,13 +26,16 @@ public class Physics
     static private int windVelocity; // Constant Wind Velocity
     
     // Step Size
-    private double stepSize;
+    private final double stepSize;
     
     // Angle and speed of projectile launch
-    private int Angle;
-    private double Speed, VelX0, VelY0;
+    private final int Angle;
+    private final double Speed;
+    private final double VelX0;
+    private final double VelY0;
     // Starting X and Y locations of projectile
-    private int startX,startY;
+    private final int startX;
+    private final int startY;
     // Current X and Y positions
     private int X, Y;
     // Current step in trajectory
@@ -113,7 +116,7 @@ public class Physics
     // Calculate trajectory for specified Steps.
     // Assumes that the vectors Xpos[] and Ypos[] have already been allocated
     // Note stepSize determines jump size and may need to be set properly
-    public void CalcTrajectory(int Xpos[],int Ypos[],int steps)
+    public void CalcTrajectory(int[] Xpos, int[] Ypos, int steps)
     {
 	// ERROR Condition if steps is <= 0
 	if (steps<=0) 

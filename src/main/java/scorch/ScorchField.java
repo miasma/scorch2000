@@ -15,37 +15,37 @@ package scorch;
 import java.awt.*;
 import java.awt.event.*;
 import java.util.*;
-import java.awt.image.*;
 
 import scorch.utility.*;
 import scorch.backgrounds.*;
 import scorch.weapons.*;
-import scorch.items.*;
 
 public final  class ScorchField extends Canvas 
     implements Runnable, 
 	       MouseMotionListener,
 	       FocusListener
 {
-    private Image backBuffer, evenMoreBackBuffer;
+    private Image backBuffer;
+	private final Image evenMoreBackBuffer;
     private Graphics backBufferG;
-    private int width, height;
-    private Bitmap bitmap;
-    private ScorchApplet scorchApplet;
+    private final int width;
+	private final int height;
+    private final Bitmap bitmap;
+    private final ScorchApplet scorchApplet;
     private Color groundColor;
     
     private Thread thread;
     private boolean sendEOT = false;
-    private Vector currentAnimations; // Explodable
+    private final Vector<Explodable> currentAnimations;
 
-    private ScorchChat chat;
-    private Tooltip tooltip;
+    private final ScorchChat chat;
+    private final Tooltip tooltip;
 
     private ScorchPlayer player; // the player which fires
     private long earnedCash = 0; // cash and kills earned in this *round*
     private int kills = 0;
 
-    private Random rand;
+    private final Random rand;
     
     // TERRAIN GENERATION MUST BE REIMPLEMENTED
     // we neved got a chance to do it right. the code that generates
@@ -102,7 +102,7 @@ public final  class ScorchField extends Canvas
 
 	placeTanks();
 	
-	currentAnimations = new Vector();
+	currentAnimations = new Vector<>();
 
 	chat = new ScorchChat(this, bitmap.getBackground());
 	tooltip = new Tooltip(this);
@@ -161,7 +161,7 @@ public final  class ScorchField extends Canvas
 			    {
 				backBufferG.drawString
 				    (""+(float)sp.getPowerLimit()/
-				     (float)sp.maxPower*100,
+				     (float) ScorchPlayer.maxPower *100,
 				     sp.getX(), sp.getY()+2*sp.getHeight());
 			    }
 		    }
@@ -177,36 +177,36 @@ public final  class ScorchField extends Canvas
 	int tankType;
 	int numPlayers = scorchApplet.getPlayersNum();
 	ScorchPlayer sp;
-	Vector positions = new Vector(numPlayers);
+	Vector<Integer> positions = new Vector<>(numPlayers);
 	int ct, t;
 	
 	for(int i = 0; i < numPlayers; i++)
-	    positions.addElement(new Integer(i));
+	    positions.addElement(i);
 	
 	for(int i = 0; i < numPlayers; i++)
 	    {
 		t = Math.abs(rand.nextInt()) % positions.size();
-		ct = ((Integer)positions.elementAt(t)).intValue();
+		ct = positions.elementAt(t);
 		positions.removeElementAt(t);
 		
 		sp = scorchApplet.getPlayer(ct);
 		sp.onFieldInit(this, bitmap, ct);
 		tankType = sp.getTankType();
-		tank = Tanks.tanks[tankType];
 
-		bitmap.setColor(null);
+			bitmap.setColor(null);
 		for(int j = 1; j < height; j++)
 		    {
 			int count = 0, k;
 			for(k = 0; k < Tanks.getTankWidth(tankType) &&
-				count < Tanks.getTankWidth(tankType); k++)
-			    if(!bitmap.isBackground
-			       (k+width/(numPlayers+1)*(i+1),j))
-				{
-				    count++;
-				    bitmap.setPixel
-					(k+width/(numPlayers+1)*(i+1),j-1);
+				count < Tanks.getTankWidth(tankType); k++) {
+				int x = k+width/(numPlayers+1)*(i+1);
+				if (!bitmap.isBackground
+						(x, j)) {
+					count++;
+					bitmap.setPixel
+							(x, j - 1);
 				}
+			}
 			
 			if(count >= Tanks.getTankWidth(tankType))
 			    {
@@ -216,8 +216,7 @@ public final  class ScorchField extends Canvas
 				sp.drawNextFrame(true);
 
 				j = height;
-				k = height;
-			    }
+				}
 		    }
 	    }
     }
@@ -251,7 +250,7 @@ public final  class ScorchField extends Canvas
  
     public synchronized void run()
     {
-	int i = 0;
+	int i;
 
 	if( thread == null ) return;
 
@@ -301,7 +300,7 @@ public final  class ScorchField extends Canvas
 
     private synchronized void runCurrentAnimation()
     {
-	int i = 0;
+	int i;
 	Explodable ca;
 	
 	if( scorchApplet.GalslaMode )
@@ -312,7 +311,7 @@ public final  class ScorchField extends Canvas
 			    scorchApplet.getPlayer(i).drawNextFrame(true);
 			try
 			    {
-				thread.sleep(60);
+				Thread.sleep(60);
 			    }
 			catch(InterruptedException e){}
 		    }
@@ -325,7 +324,7 @@ public final  class ScorchField extends Canvas
 		i = 0;
 		while( i < currentAnimations.size() )
 		    {
-			ca = (Explodable)(currentAnimations.elementAt(i));
+			ca = currentAnimations.elementAt(i);
 
 			if( ca.drawNextFrame(true) )
 			    {
@@ -341,7 +340,7 @@ public final  class ScorchField extends Canvas
 		    }
 		try
 		    {
-			thread.sleep(40); // this shouldn't be constant?
+			Thread.sleep(40); // this shouldn't be constant?
 		    }
 		catch(InterruptedException e){}
 	    }
@@ -361,7 +360,6 @@ public final  class ScorchField extends Canvas
 	if( ca instanceof ScorchPlayer &&  ((ScorchPlayer)ca).isAlive() )
 	{
 	    killTanks(null,null,false); // kills from falling
-	    return;
 	}
     }
     
@@ -416,7 +414,7 @@ public final  class ScorchField extends Canvas
     {
 	ScorchPlayer sp;
 	int counter = 0, cur_damage;
-	boolean alive = true;
+	boolean alive;
 	
 	//Debug.printThreads();
 
@@ -463,7 +461,7 @@ public final  class ScorchField extends Canvas
 		if( ai_mode && cur_damage > 0 )
 		    {
 			if(sp == caller)
-			    counter-=ScorchPlayer.MAX_PLAYERS*sp.maxPower;
+			    counter-=ScorchPlayer.MAX_PLAYERS* ScorchPlayer.maxPower;
 			else
 			    counter+=expl.calculateDamage(sp);
 		    }
@@ -540,7 +538,7 @@ public final  class ScorchField extends Canvas
     private Background randomBackground()
     {
 	Color rc1, rc2;
-	Color colors[] = 
+	Color[] colors =
 	{Color.black, new Color(0, 150, 0), 
 	 new Color(254,0,0), new Color(0,0,254), 
 	 new Color(254,254,254), new Color(0,254,254), 
@@ -605,8 +603,8 @@ public final  class ScorchField extends Canvas
 
 	int angle = player.getAngle();
 
-	physics = new Physics((int)(player.getTurretX(2.0)),
-			      (int)(bitmap.getHeight()-player.getTurretY(2.0)),
+	physics = new Physics(player.getTurretX(2.0),
+			bitmap.getHeight()-player.getTurretY(2.0),
 			      angle, player.getPower() / 8.0);
 
 	Debug.log(player+" shoots:");
@@ -636,7 +634,7 @@ public final  class ScorchField extends Canvas
     public void newChatMsg(String msg)
     {
 	chat.addMessage(msg);
-	if( msg.indexOf("Galsla") != -1)
+	if(msg.contains("Galsla"))
 	    {
 	       	chat.addSystemMessage("PRIVET GALKA!!!");
 		scorchApplet.GalslaMode = true;
@@ -743,7 +741,7 @@ class Tooltip
     private String tip;
     private int x, y;
     private Graphics g;
-    private ScorchField owner;
+    private final ScorchField owner;
 
     private FontMetrics fm = null;
     private int fontHeight;

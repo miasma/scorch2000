@@ -17,8 +17,8 @@ import swindows.*;
 public class StartGame extends sWindow implements ActionListener,
 						  FocusListener
 {
-    private List players;
-    private TextField maxPlayersText;
+    private final List players;
+    private final TextField maxPlayersText;
     private int maxPlayers;
 
     public StartGame(ScorchApplet owner)

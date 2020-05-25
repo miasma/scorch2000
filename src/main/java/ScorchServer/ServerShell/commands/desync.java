@@ -13,7 +13,7 @@ public class desync extends shellCommand
     public static String help = "To print current number of desyncs.";
 
     //arguments are ignored here for now.
-    public static void run(Vector args, Object owner)
+    public static void run(Vector<String> args, Object owner)
     {
 	((ServerShell)owner).println("Observed number of desyncs so far: " +
 				     ScorchServer.getDesyncCount() +" out of " 

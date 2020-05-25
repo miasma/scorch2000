@@ -9,12 +9,11 @@ package scorch.gui;
 import java.awt.*;
 
 import scorch.*;
-import scorch.utility.*;
 import swindows.*;
 
 public class GamesPanel extends sWindow
 {
-    Panel gamesList;
+    final Panel gamesList;
 
     public GamesPanel(int x, int y, int w, int h, ScorchApplet owner)
     {

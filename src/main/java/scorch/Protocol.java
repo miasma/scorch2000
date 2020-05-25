@@ -12,61 +12,61 @@ package scorch;
 
 public final class Protocol
 {
-    public static char separator = (char)0;
+    public static final char separator = (char)0;
 
     //general commands
-    public static String commandfailed = "COMMANDFAILED";//'reason'
+    public static final String commandfailed = "COMMANDFAILED";//'reason'
     public static String debug = "DEBUG"; // 'String'
-    public static String guest = "guest";   // guest user
-    public static String setplayeroptions = "PLOPTIONS";     
+    public static final String guest = "guest";   // guest user
+    public static final String setplayeroptions = "PLOPTIONS";
     //'player id' 'tank type'
-    public static String masskill = "MK";
+    public static final String masskill = "MK";
     public static String boot = "BOOT"; // player id
     //kill all the tanks in the game. only executed by master
-    public static String topten = "TOP10"; 
+    public static final String topten = "TOP10";
 
     //Commands understood by server
-    public static String login = "LOGIN";   // 'User Name' 'Password' 
-    public static String newplayer = "NEW"; //'user' 'password' 'profile'
-    public static String jvminfo = "JVM";   //'jvm version'
+    public static final String login = "LOGIN";   // 'User Name' 'Password'
+    public static final String newplayer = "NEW"; //'user' 'password' 'profile'
+    public static final String jvminfo = "JVM";   //'jvm version'
     public static String removeplayer = "RMPLAYER"; //'username' 'password'
-    public static String pong = "PONG";     // answer to ping
-    public static String setgameoptions = "OPTIONS";
+    public static final String pong = "PONG";     // answer to ping
+    public static final String setgameoptions = "OPTIONS";
     //'intial cash' 'wind' 'nature hazards'
-    public static String addaiplayer = "ADDAI";          //'ai player type'
-    public static String setmaxplayers = "SETMAXPL";     //'number'
-    public static String playerdead = "PLDEAD";          //'player id'
-    public static String endofturn = "EOT";        
-    public static String shout = "SHOUT";          //'message'
-    public static String say = "SAY";              //'pl id' 'message'
-    public static String update = "UPDATE";        //'power' 'angle'
-    public static String useweapon = "USEWEAPON";  //'weapon_id' 
-    public static String useitem = "USEITEM";      //'item_id' 'quantity'
-    public static String quit = "QUIT"; 
-    public static String changeprofile = "CHPROF"; //'new profile' 
+    public static final String addaiplayer = "ADDAI";          //'ai player type'
+    public static final String setmaxplayers = "SETMAXPL";     //'number'
+    public static final String playerdead = "PLDEAD";          //'player id'
+    public static final String endofturn = "EOT";
+    public static final String shout = "SHOUT";          //'message'
+    public static final String say = "SAY";              //'pl id' 'message'
+    public static final String update = "UPDATE";        //'power' 'angle'
+    public static final String useweapon = "USEWEAPON";  //'weapon_id'
+    public static final String useitem = "USEITEM";      //'item_id' 'quantity'
+    public static final String quit = "QUIT";
+    public static final String changeprofile = "CHPROF"; //'new profile'
     public static String donebuying = "DONEBUYING"; 
-    public static String endofround = "EOR";             //'stats of round'
-    public static String endofgame = "EOG";              //'stats of game'
+    public static final String endofround = "EOR";             //'stats of round'
+    public static final String endofgame = "EOG";              //'stats of game'
 
     //Commands understood by client
-    public static String ping = "PING"; //ping 
-    public static String loggedin = "LOGGEDIN"; //'name' 'Id'(int) 'profile'
-    public static String ailoggedin = "AILOGGEDIN"; //'name' 'Id' 'profile'
-    public static String loginfailed = "LOGINFAILED"; //'reason'
+    public static final String ping = "PING"; //ping
+    public static final String loggedin = "LOGGEDIN"; //'name' 'Id'(int) 'profile'
+    public static final String ailoggedin = "AILOGGEDIN"; //'name' 'Id' 'profile'
+    public static final String loginfailed = "LOGINFAILED"; //'reason'
     //reasons for failed login
-    public static String wrongpassword = "PASSWD";    //wrong password
-    public static String alreadyloggedin = "INGAME";  //user already playing
-    public static String wrongusername = "UNAME";     // wrong username
-    public static String usernametaken = "UNAMETAKE"; // username already taken
+    public static final String wrongpassword = "PASSWD";    //wrong password
+    public static final String alreadyloggedin = "INGAME";  //user already playing
+    public static final String wrongusername = "UNAME";     // wrong username
+    public static final String usernametaken = "UNAMETAKE"; // username already taken
 
-    public static String disconnect = "DISCONNECT"; //'message'
-    public static String playerleft = "LEFT";       //'id'
-    public static String gameoptions = "OPTIONS"; 
+    public static final String disconnect = "DISCONNECT"; //'message'
+    public static final String playerleft = "LEFT";       //'id'
+    public static final String gameoptions = "OPTIONS";
     //'initial cash' 'wind' 'nature hazards' 'seed'
     public static String playerusedweapon = "USEWEAPON"; //'weapon_id'
     public static String playeruseditem = "USEDITEM";    //'item_id' 'quantity'
-    public static String maketurn = "MAKETURN";          //'player_id'
+    public static final String maketurn = "MAKETURN";          //'player_id'
 
-    public static String requestlog = "RLOG"; 
-    public static String clientlog = "CLOG"; // 'log'
+    public static final String requestlog = "RLOG";
+    public static final String clientlog = "CLOG"; // 'log'
 }

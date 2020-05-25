@@ -26,13 +26,11 @@ public class ScorchPlayer extends PhysicalObject implements Explodable
     public static final int minPower = (int)(0.2*maxPower);
     public static final int startPower = 300;
 
-    private static long cashBounty = 40000;
-
-    private int ID;
-    private PlayerProfile profile;
+    private final int ID;
+    private final PlayerProfile profile;
     private int color = -1;
-    private Weapon[] weapons;
-    private Item[] items;
+    private final Weapon[] weapons;
+    private final Item[] items;
     private int parachutes = 0, tracers = 0;
     private Shield shield = null;
     
@@ -63,7 +61,7 @@ public class ScorchPlayer extends PhysicalObject implements Explodable
 	fallDirection = -1, // F_LEFT or F_RIGHT
 	leftPos, rightPos; // falling margins for dirt dropping 
 
-    protected ScorchApplet owner;
+    protected final ScorchApplet owner;
 
     public ScorchPlayer(int id, PlayerProfile profile, ScorchApplet owner)
     {
@@ -288,7 +286,7 @@ public class ScorchPlayer extends PhysicalObject implements Explodable
 	if( shield == null || !alive )
 	    return;
 	
-	int radius = (int)(2*Math.max(getWidth(), getHeight()));
+	int radius = 2*Math.max(getWidth(), getHeight());
 	int i = Math.max(0, (int)(255*shield.getStrength()/
 				  shield.getMaxStrength()));
 	
@@ -304,7 +302,7 @@ public class ScorchPlayer extends PhysicalObject implements Explodable
 	if( true || shield == null || (falling && show) )
 	    return; 
 
-	int radius = (int)(Math.max(getWidth(), getHeight()));
+	int radius = Math.max(getWidth(), getHeight());
 	int i = Math.max(0, (int)(255*shield.getStrength()/
 				  shield.getMaxStrength()));
 	int xc = x+getWidth()/2, yc = y+getHeight()/2;
@@ -351,7 +349,7 @@ public class ScorchPlayer extends PhysicalObject implements Explodable
 
 	if( parachuteOpen() )
 	    {
-		mx = x + (int)((getWidth() - Parachute.pIcon[0].length)/2);
+		mx = x + ((getWidth() - Parachute.pIcon[0].length)/2);
 		my = getTurretSY() - Parachute.pIcon.length;
 		if( show )
 		    bitmap.drawSprite(mx, my, Parachute.pIcon, 0);
@@ -437,7 +435,7 @@ public class ScorchPlayer extends PhysicalObject implements Explodable
 
     public long getBounty()
     {
-	return cashBounty;
+		return 40000;
     }
     
     public long getEarnedCash()
@@ -569,7 +567,7 @@ public class ScorchPlayer extends PhysicalObject implements Explodable
 	if( parachuteOpen() ) 
 	    {
 		parachutes--;
-		((Parachute)items[Item.Parachute]).
+		items[Item.Parachute].
 		    decQuantity();
 	    }
 	else
@@ -968,7 +966,7 @@ public class ScorchPlayer extends PhysicalObject implements Explodable
 	if( tracers > 0 )
 	    {
 		tracers--;
-		((Tracer)items[Item.Tracer]).decQuantity();
+		items[Item.Tracer].decQuantity();
 		return true;
 	    }
 	else
@@ -992,16 +990,14 @@ public class ScorchPlayer extends PhysicalObject implements Explodable
     
     public Explosion getWeaponExplosion(int weapon)
     {
-	Explosion e = weapons[weapon].produceExplosion(bitmap, rand);
-	return e;
+		return weapons[weapon].produceExplosion(bitmap, rand);
     }
 
     public String toString()
     {
-	String res = "name: "+getName()+" angle: "+getAngle()+" power: "+
-	    getPower()+" powerLimit: "+ powerLimit;
-	
-	return res;
+
+		return "name: "+getName()+" angle: "+getAngle()+" power: "+
+			getPower()+" powerLimit: "+ powerLimit;
     }
 
     // return string to be displayed in tool tip

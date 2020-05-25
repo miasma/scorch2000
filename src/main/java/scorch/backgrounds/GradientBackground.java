@@ -13,8 +13,8 @@ import scorch.Bitmap;
 
 public class GradientBackground extends Background
 {
-    private int steps;
-    private int[] colors;
+    private final int steps;
+    private final int[] colors;
 
     public GradientBackground(int width, int height, 
 			      Color color1, Color color2, int steps)

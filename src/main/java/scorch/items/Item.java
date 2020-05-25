@@ -14,14 +14,11 @@ import scorch.*;
 
 public abstract class Item
 {
-    private static int initialQuantity = 0;
-
-    private static String pkgName = "scorch.items.";
 
     public static final int Shield = 0, MediumShield = 1, HeavyShield = 2,
 	Parachute = 3, Battery = 4, Tracer = 5, AutoDefense = 6, Fuel = 7;
 
-    private static final String names[] = {
+    private static final String[] names = {
 	"Shield", "Medium Shield", "Heavy Shield",
 	"Parachute", "Battery", "Tracer", "Auto Defense", "Fuel"
     };
@@ -44,7 +41,7 @@ public abstract class Item
 
     public Item()
     {
-	quantity = initialQuantity;
+        quantity = 0;
     }
     
     public String getName()
@@ -136,9 +133,10 @@ public abstract class Item
 	    {
 		for(int i = 0; i < names.length; i++)
 		    {
-			String name = trimSpaces(pkgName, names[i]);
+                String pkgName = "scorch.items.";
+                String name = trimSpaces(pkgName, names[i]);
 
-			result[i] = (Item)Class.forName(name).newInstance();
+			result[i] = (Item)Class.forName(name).getConstructors()[0].newInstance();
 			result[i].scorchPlayer = sp;
 		    }
 	    }
@@ -157,11 +155,11 @@ public abstract class Item
 
     public static String trimSpaces(String pName, String fullName)
     {
-	String name = pName;
+	StringBuilder name = new StringBuilder(pName);
 
 	StringTokenizer st = new StringTokenizer(fullName, " ");
-	while( st.hasMoreTokens() ) name += st.nextToken();
+	while( st.hasMoreTokens() ) name.append(st.nextToken());
 	
-	return name;
+	return name.toString();
     }
 }

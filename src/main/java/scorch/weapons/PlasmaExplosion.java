@@ -21,25 +21,25 @@ public class PlasmaExplosion extends RoundExplosion
 
     private int frameNum = 0;
     
-    static PlasmaColorModel pallete=new PlasmaColorModel(32);
+    static final PlasmaColorModel pallete=new PlasmaColorModel(32);
 		
     int width;
     int height;
     int radius;
 		
-    int data[][];
+    int[][] data;
     
     long duration;
 		
-    static int SinArray[];
+    static final int[] SinArray;
     static{
 	SinArray=new int[360];
 	for(int x=0;x<SinArray.length;x++)
-	    SinArray[x]=(int)(Math.sin(rad((double)x))*1024);
+	    SinArray[x]=(int)(Math.sin(rad(x))*1024);
     }
 		
     static double rad(double angle){
-			return(double)(angle*Math.PI/180.);
+			return angle*Math.PI/180.;
     }
         			
     public PlasmaExplosion(Bitmap bitmap, int x, int y, 
@@ -73,13 +73,13 @@ public class PlasmaExplosion extends RoundExplosion
 	return ie;		
     }
     
-    int XValues[];
+    int[] XValues;
     int ToAdd=0;
     int YAnswer;
     int XAnswer;
     boolean first=true;
     int counter=radius/10;
-    int step=2;
+    final int step=2;
 						
     public boolean drawNextFrame(boolean update){
 	
@@ -156,6 +156,6 @@ class PlasmaColorModel extends ScorchColorModel
     }
     
     public int getRGB(int pixel){
-	return ((((int)255)<<24)|(r[pixel]<<16)|(g[pixel]<<8)|b[pixel]);
+	return ((255 <<24)|(r[pixel]<<16)|(g[pixel]<<8)|b[pixel]);
     }
 }

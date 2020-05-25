@@ -13,17 +13,16 @@ import java.util.Vector;
 
 public class sScrollPanel extends sPanel
 {
-    private int rows,  // number of visible rows
-	start_idx,     // the first rows displayed in panel (currently)
-	total_rows;    // total number of rows in the panel
+    private final int rows;  // number of visible rows
+	private int start_idx;     // the first rows displayed in panel (currently)
+	private final int total_rows;    // total number of rows in the panel
     private Panel mainPanel;
-    private Panel wp;  // weapper panel around mainPanel
-    private sScrollBar sb;
-    private Vector panels;
+    private final Panel wp;  // weapper panel around mainPanel
+    private final Vector<Panel> panels;
     private Container owner;
 
     public sScrollPanel(Container owner, int width, int height, 
-			Vector panels, int rows)
+			Vector<Panel> panels, int rows)
     {
         super(width, height);
 
@@ -41,7 +40,7 @@ public class sScrollPanel extends sPanel
 	// do we need a scroll bar?
 	if( rows < total_rows )
 	    {
-		sb = new sScrollBar(this);
+            sScrollBar sb = new sScrollBar(this);
 		wp.add(sb, BorderLayout.EAST);
 	    }
 
@@ -50,12 +49,12 @@ public class sScrollPanel extends sPanel
 
     private void rebuild()
     {
-	Panel np = new Panel(new GridLayout(rows, 1, 0, 0)), tp = null;
+	Panel np = new Panel(new GridLayout(rows, 1, 0, 0)), tp;
 	np.setBackground(Color.gray);
 	
 	for(int i = start_idx; i < start_idx+rows; i++)
 	    {
-		tp = (Panel)panels.elementAt(i);
+		tp = panels.elementAt(i);
 		np.add(tp);
 		np.validate();
 	    }
@@ -136,15 +135,15 @@ public class sScrollPanel extends sPanel
 class sScrollButton extends Component implements MouseListener,
 						 MouseMotionListener
 {
-    public static int SCROLL_UP = 0,
-	SCROLL_DOWN = 1;
+    public static final int SCROLL_UP = 0;
+    public static final int SCROLL_DOWN = 1;
 
-    private static int btnSize = 17;
+    private static final int btnSize = 17;
 
-    private int type;
+    private final int type;
     private boolean bpressed = false,  // button pressed
 	mpressed = false;              // mouse button pressed
-    private sScrollPanel owner;
+    private final sScrollPanel owner;
     
     private static final Color d = Color.darkGray, w = Color.white, 
 	l = Color.lightGray, n = null;
@@ -267,8 +266,7 @@ class sScrollButton extends Component implements MouseListener,
 	    {
 		bpressed = true;
 		repaint();
-		return;
-	    }
+        }
     }
     
     public void mouseMoved(MouseEvent evt)
@@ -296,17 +294,14 @@ class sScrollButton extends Component implements MouseListener,
 
 class sScrollBar extends Container
 {
-    private sScrollPanel owner;
-    private sScrollButton btnUP, btnDN;
 
     public sScrollBar(sScrollPanel owner)
     {
 	super();
 	setLayout(new BorderLayout(0,0));
-	this.owner = owner;
-	
-	btnUP = new sScrollButton(sScrollButton.SCROLL_UP, owner);
-	btnDN = new sScrollButton(sScrollButton.SCROLL_DOWN, owner);
+
+        sScrollButton btnUP = new sScrollButton(sScrollButton.SCROLL_UP, owner);
+        sScrollButton btnDN = new sScrollButton(sScrollButton.SCROLL_DOWN, owner);
 	add(btnUP, BorderLayout.NORTH);
 	add(btnDN, BorderLayout.SOUTH);
 	add(new sSeparator(), BorderLayout.WEST);

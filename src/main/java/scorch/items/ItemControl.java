@@ -13,8 +13,8 @@ import scorch.ScorchApplet;
 
 public abstract class ItemControl extends Container
 {
-    protected ScorchApplet owner;
-    protected Item item;
+    protected final ScorchApplet owner;
+    protected final Item item;
     protected Component control;
 
     public ItemControl(Item item, ScorchApplet owner)

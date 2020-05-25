@@ -9,12 +9,11 @@ package scorch.items;
 import java.awt.*;
 import java.awt.event.*;
 
-import scorch.utility.*;
 import scorch.ScorchApplet;
 
 public class Battery extends Item
 {
-    public static int power = 100;
+    public static final int power = 100;
     
     public Battery()
     {
@@ -47,7 +46,7 @@ class BatteryControl extends ItemControl implements ActionListener
 	if( evt.getActionCommand().equals("Install") )
 	    {
 		if( item.getQuantity() > 0 )
-		    owner.useItem(Item.Battery, ((Battery)item).power);
+		    owner.useItem(Item.Battery, Battery.power);
 	    }
 
     }

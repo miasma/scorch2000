@@ -1,3 +1,7 @@
+package scorch.utility;
+
+import scorch.PlayerProfile;
+
 /****************************************************************************
  * Crypt.java
  *
@@ -5,22 +9,17 @@
  *
  * Based upon C source code written by Eric Young, eay@psych.uq.oz.au
  *
- * Taken from JFD's (jdumas@zgs.com) implementation of crypt 
+ * Taken from JFD's (jdumas@zgs.com) implementation of crypt
  * Maintained by Alex Rasin
  *
  ****************************************************************************/
-
-package scorch.utility;
-
-import scorch.PlayerProfile;
-
 public class Crypt
 {
    private Crypt() {}
 
    private static final int ITERATIONS = 16;
 
-   private static final int con_salt[] =
+   private static final int[] con_salt =
    {
       0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 
       0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 
@@ -40,13 +39,13 @@ public class Crypt
       0x3D, 0x3E, 0x3F, 0x00, 0x00, 0x00, 0x00, 0x00, 
    };
 
-   private static final boolean shifts2[] =
+   private static final boolean[] shifts2 =
    {
       false, false, true, true, true, true, true, true,
       false, true,  true, true, true, true, true, false
    };
 
-   private static final int skb[][] =
+   private static final int[][] skb =
    {
       {
          /* for C bits (numbered as per FIPS 46) 1 2 3 4 5 6 */
@@ -202,7 +201,7 @@ public class Crypt
       },
    };
 
-   private static final int SPtrans[][] =
+   private static final int[][] SPtrans =
    {
       {
          /* nibble 0 */
@@ -358,7 +357,7 @@ public class Crypt
       }
    };
 
-   private static final int cov_2char[] =
+   private static final int[] cov_2char =
    {
       0x2E, 0x2F, 0x30, 0x31, 0x32, 0x33, 0x34, 0x35, 
       0x36, 0x37, 0x38, 0x39, 0x41, 0x42, 0x43, 0x44, 
@@ -370,34 +369,33 @@ public class Crypt
       0x73, 0x74, 0x75, 0x76, 0x77, 0x78, 0x79, 0x7A
    };
 
-   private static final int byteToUnsigned(byte b)
+   private static int byteToUnsigned(byte b)
    {
-      int value = (int)b;
 
-      return(value >= 0 ? value : value + 256);
+      return((int)b >= 0 ? (int)b : (int)b + 256);
    }
 
-   private static int fourBytesToInt(byte b[], int offset)
+   private static int fourBytesToInt(byte[] b, int offset)
    {
       int value;
 
       value  =  byteToUnsigned(b[offset++]);
       value |= (byteToUnsigned(b[offset++]) <<  8);
       value |= (byteToUnsigned(b[offset++]) << 16);
-      value |= (byteToUnsigned(b[offset++]) << 24);
+      value |= (byteToUnsigned(b[offset]) << 24);
 
       return(value);
    }
 
-   private static final void intToFourBytes(int iValue, byte b[], int offset)
+   private static void intToFourBytes(int iValue, byte[] b, int offset)
    {
       b[offset++] = (byte)((iValue)        & 0xff);
       b[offset++] = (byte)((iValue >>> 8 ) & 0xff);
       b[offset++] = (byte)((iValue >>> 16) & 0xff);
-      b[offset++] = (byte)((iValue >>> 24) & 0xff);
+      b[offset] = (byte)((iValue >>> 24) & 0xff);
    }
 
-   private static final void PERM_OP(int a, int b, int n, int m, int results[])
+   private static void PERM_OP(int a, int b, int n, int m, int[] results)
    {
       int t;
 
@@ -409,7 +407,7 @@ public class Crypt
       results[1] = b;
    }
 
-   private static final int HPERM_OP(int a, int n, int m)
+   private static int HPERM_OP(int a, int n, int m)
    {
       int t;
 
@@ -419,14 +417,14 @@ public class Crypt
       return(a);
    }
 
-   private static int [] des_set_key(byte key[])
+   private static int [] des_set_key(byte[] key)
    {
-      int schedule[] = new int[ITERATIONS * 2];
+      int[] schedule = new int[ITERATIONS * 2];
 
       int c = fourBytesToInt(key, 0);
       int d = fourBytesToInt(key, 4);
 
-      int results[] = new int[2];
+      int[] results = new int[2];
 
       PERM_OP(d, c, 4, 0x0f0f0f0f, results);
       d = results[0]; c = results[1];
@@ -477,18 +475,18 @@ public class Crypt
              skb[6][ (d >>>15) & 0x3f                       ]|
              skb[7][((d >>>21) & 0x0f) | ((d >>> 22) & 0x30)];
 
-         schedule[j++] = ((t <<  16) | (s & 0x0000ffff)) & 0xffffffff;
+         schedule[j++] = ((t << 16) | (s & 0x0000ffff));
          s             = ((s >>> 16) | (t & 0xffff0000));
 
          s             = (s << 4) | (s >>> 28);
-         schedule[j++] = s & 0xffffffff;
+         schedule[j++] = s;
       }
       return(schedule);
    }
 
-   private static final int D_ENCRYPT
+   private static int D_ENCRYPT
    (
-      int L, int R, int S, int E0, int E1, int s[]
+           int L, int R, int S, int E0, int E1, int[] s
    )
    {
       int t, u, v;
@@ -512,11 +510,11 @@ public class Crypt
       return(L);
    }
 
-   private static final int [] body(int schedule[], int Eswap0, int Eswap1)
+   private static int [] body(int[] schedule, int Eswap0, int Eswap1)
    {
       int left = 0;
       int right = 0;
-      int t     = 0;
+      int t;
 
       for(int j = 0; j < 25; j ++)
       {
@@ -538,7 +536,7 @@ public class Crypt
       left  &= 0xffffffff;
       right &= 0xffffffff;
 
-      int results[] = new int[2];
+      int[] results = new int[2];
 
       PERM_OP(right, left, 1, 0x55555555, results); 
       right = results[0]; left = results[1];
@@ -555,7 +553,7 @@ public class Crypt
       PERM_OP(right, left, 4, 0x0f0f0f0f, results);
       right = results[0]; left = results[1];
 
-      int out[] = new int[2];
+      int[] out = new int[2];
 
       out[0] = left; out[1] = right;
 
@@ -564,7 +562,7 @@ public class Crypt
 
     private static String validateSaltChars(String salt)
     {
-	String result = "";
+	StringBuilder result = new StringBuilder();
 	char ch;
 
 	for (int i = 0; i < 2/*salt.lenght()*/; i++)
@@ -573,20 +571,20 @@ public class Crypt
 		if (ch < '0' || (ch > '9' && ch < 'A') || 
 		    (ch > 'z') || (ch > 'Z' && ch < 'a') )
 		    ch = '0';
-		result += ch;
+		result.append(ch);
 	    }
-	return result;
+	return result.toString();
     }
 
-   public static final String crypt(String salt, String original)
+   public static String crypt(String salt, String original)
    {
 
-       salt = validateSaltChars(salt);
+      StringBuilder saltBuilder = new StringBuilder(validateSaltChars(salt));
+      while(saltBuilder.length() < 2)
+         saltBuilder.append("A");
+      salt = saltBuilder.toString();
 
-      while(salt.length() < 2)
-         salt += "A";
-
-      StringBuffer buffer = new StringBuffer("             ");
+      StringBuilder buffer = new StringBuilder("             ");
 
       char charZero = salt.charAt(0);
       char charOne  = salt.charAt(1);
@@ -597,22 +595,19 @@ public class Crypt
       int Eswap0 = con_salt[(int)charZero];
       int Eswap1 = con_salt[(int)charOne] << 4;
  
-      byte key[] = new byte[8];
-
-      for(int i = 0; i < key.length; i ++)
-         key[i] = (byte)0;
+      byte[] key = new byte[8];
 
       for(int i = 0; i < key.length && i < original.length(); i ++)
       {
-         int iChar = (int)original.charAt(i);
+         int iChar = original.charAt(i);
 
          key[i] = (byte)(iChar << 1);
       }
 
-      int schedule[] = des_set_key(key);
-      int out[]      = body(schedule, Eswap0, Eswap1);
+      int[] schedule = des_set_key(key);
+      int[] out = body(schedule, Eswap0, Eswap1);
 
-      byte b[] = new byte[9];
+      byte[] b = new byte[9];
 
       intToFourBytes(out[0], b, 0);
       intToFourBytes(out[1], b, 4);
@@ -644,7 +639,7 @@ public class Crypt
      encrypts the profile's password.  Takes first and last letter of the
      user name as the salt (user name cannot be changed)
    */
-   public static final PlayerProfile cryptProfile(PlayerProfile pl )
+   public static PlayerProfile cryptProfile(PlayerProfile pl )
    {
       String salt = "" + pl.getName().charAt(0) +
               pl.getName().charAt(pl.getName().length()-1);

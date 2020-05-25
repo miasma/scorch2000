@@ -36,11 +36,11 @@ public class GameControl extends Panel
 
 class GameIcon extends Canvas
 {
-    private static String[] iconNames = {"Images/gicon1.gif",
+    private static final String[] iconNames = {"Images/gicon1.gif",
 					 "Images/gicon2.gif"};
     private static Image[] icons;
 
-    private Image icon;
+    private final Image icon;
 
     GameIcon()
     {

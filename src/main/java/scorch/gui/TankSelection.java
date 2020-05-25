@@ -9,7 +9,6 @@ package scorch.gui;
 */
 
 import java.awt.*;
-import java.awt.event.*;
 
 import scorch.*;
 import scorch.backgrounds.PlainBackground;
@@ -17,7 +16,7 @@ import swindows.*;
 
 public class TankSelection extends sPanel
 {
-    TankSelectionControl control;
+    final TankSelectionControl control;
 
     public TankSelection(int w, int h)
     {
@@ -46,10 +45,11 @@ public class TankSelection extends sPanel
 
 class TankSelectionControl extends Panel 
 {
-    private static int tankBorder = 3;
+    private static final int tankBorder = 3;
     
     private Bitmap bitmap = null;
-    private int width = -1, height = -1;
+    private final int width;
+	private final int height;
     private Image backBuffer;
     private int selectedTank = 0;
     
@@ -89,9 +89,9 @@ class TankSelectionControl extends Panel
 	if( evt.id == Event.MOUSE_DOWN || evt.id == Event.MOUSE_UP ||
 	    evt.id == Event.MOUSE_DRAG )
 	    {
-		x = evt.x; y = evt.y;
+		x = evt.x;
 
-		i = ((x - (width/(Tanks.tankNum+1))/2) / 
+			i = ((x - (width/(Tanks.tankNum+1))/2) /
 		     (width/(Tanks.tankNum+1)));
 
 		if( i < 0 || i >= Tanks.tankNum )

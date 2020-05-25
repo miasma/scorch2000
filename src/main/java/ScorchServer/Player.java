@@ -76,7 +76,7 @@ abstract public class Player
        Get the name and modify it to reflect if the player is
        dead or alive.  Get's the vector of the living players
     */
-    public String getName(Vector the_living)
+    public String getName(Vector<Player> the_living)
     {
 	return "["+(profile.isGuest() ? "g" : "") + (isReady() ? "+" : "" ) + 
 	           (the_living.contains(this) ? "" : "^") + "]"+name;

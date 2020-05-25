@@ -8,7 +8,6 @@ package scorch.items;
 import java.awt.*;
 import java.awt.event.*;
 
-import scorch.utility.*;
 import scorch.ScorchApplet;
 
 public class Tracer extends Item

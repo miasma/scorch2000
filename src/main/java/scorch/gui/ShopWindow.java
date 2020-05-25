@@ -18,12 +18,13 @@ import swindows.*;
 public class ShopWindow extends sWindow implements ActionListener,
 						   KeyListener
 {
-    private ScrollPane scrollPane;
-    private Button finish, cancel, leave;
-    private ScorchPlayer myPlayer;
+    private final Button finish;
+	private final Button cancel;
+	private final Button leave;
+    private final ScorchPlayer myPlayer;
     private long cash;
-    private Label lCash;
-    private ShopItem[] shopItems;
+    private final Label lCash;
+    private final ShopItem[] shopItems;
 
     public ShopWindow(int w, int h, ScorchApplet owner)
     {
@@ -55,7 +56,7 @@ public class ShopWindow extends sWindow implements ActionListener,
 	legend.add(new Label("order", Label.CENTER));
 	legend.add(new Label(""));
 
-	scrollPane = new ScrollPane();
+        ScrollPane scrollPane = new ScrollPane();
 	
 	mainPanel.add(legend, BorderLayout.NORTH);
 	mainPanel.add(itemsPanel, BorderLayout.CENTER);
@@ -106,8 +107,7 @@ public class ShopWindow extends sWindow implements ActionListener,
 	lCash.setText("Please buy weapons and items for the next round. "+
 		      "You have $"+cash+" left");
 
-	for(int i = 0; i < shopItems.length; i++)
-	    shopItems[i].updateButtons();
+		for (ShopItem shopItem : shopItems) shopItem.updateButtons();
     }
 
     public void display()
@@ -134,15 +134,13 @@ public class ShopWindow extends sWindow implements ActionListener,
 	    {
 		close();
 		((ScorchApplet)owner).Quit();
-		return;
-	    }
+		}
     }
 
     private void confirm()
     {
 	close();
-	for(int i = 0; i < shopItems.length; i++)
-	    shopItems[i].confirmOrder();
+		for (ShopItem shopItem : shopItems) shopItem.confirmOrder();
 	myPlayer.setCash(cash);
 	((ScorchApplet)owner).startGame();
     }
@@ -173,13 +171,14 @@ public class ShopWindow extends sWindow implements ActionListener,
 
 class ShopItem extends Panel implements ActionListener
 {
-    private long price;
-    private String name;
-    private int order = 0, maxOrder;
-    private Item item;
-    private Label lPrice, lQuantity, lOrder;
-    private Button add, remove;
-    private ShopWindow owner;
+    private final long price;
+    private int order = 0;
+	private final int maxOrder;
+    private final Item item;
+    private final Label lOrder;
+    private final Button add;
+	private final Button remove;
+    private final ShopWindow owner;
 
     public ShopItem(ShopWindow owner, Item item)
     {
@@ -187,7 +186,7 @@ class ShopItem extends Panel implements ActionListener
 
 	this.item = item;
 	this.owner = owner;
-	this.name = item.getName();
+        String name = item.getName();
 	this.price = item.getPrice();
 	this.maxOrder = item.getMaxOrder();
 
@@ -204,8 +203,8 @@ class ShopItem extends Panel implements ActionListener
 	t2.add(remove);
 	
 	lOrder = new Label("0", Label.CENTER);
-	lPrice = new Label(price+"", Label.CENTER);
-	lQuantity = item.getQuantityLabel();
+        Label lPrice = new Label(price + "", Label.CENTER);
+        Label lQuantity = item.getQuantityLabel();
 	add(lPrice);
 	add(lQuantity);
 	add(lOrder);
@@ -244,7 +243,6 @@ class ShopItem extends Panel implements ActionListener
 		order-=item.getBundle();
 		owner.updateCash(price);
 		lOrder.setText(""+order);
-		return;
-	    }
+		}
     }
 }

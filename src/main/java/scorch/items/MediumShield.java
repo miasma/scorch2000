@@ -5,12 +5,6 @@ package scorch.items;
   Author: Mikhail Kruk
 */
 
-import java.awt.*;
-import java.awt.event.*;
-
-import scorch.utility.*;
-import scorch.ScorchApplet;
-
 public class MediumShield extends Shield
 {
     public MediumShield()

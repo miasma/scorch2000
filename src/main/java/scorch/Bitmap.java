@@ -19,16 +19,17 @@ import java.awt.*;
 import java.awt.image.*;
 import java.util.*;
 
-import scorch.*;
 import scorch.backgrounds.*;
 
 public final class Bitmap
 {
-    private int pixels[], width, height;
-    private MemoryImageSource producer;
+    private final int[] pixels;
+	private final int width;
+	private final int height;
+    private final MemoryImageSource producer;
     
-    private Background background;
-    private Random rand;
+    private final Background background;
+    private final Random rand;
 
     private int color;
     private boolean bk_color = false, sandMode = false, directDraw = false;
@@ -80,7 +81,7 @@ public final class Bitmap
     }
 
     public synchronized void setClipping(boolean mode){
-	clipping=(mode==true ? 200 : 255);
+	clipping=(mode ? 200 : 255);
     }
 
     public synchronized boolean getClipping(){
@@ -167,7 +168,7 @@ public final class Bitmap
 	    {
 		tc = cm != null ? cm.getRGB(sprite[i]) : sprite[i];
 		if(tc != color)
-		    setPixel(x+(i%scanSize), y+((int)(i/scanSize)), tc);
+		    setPixel(x+(i%scanSize), y+ i/scanSize, tc);
 	    }
     }
 
@@ -188,14 +189,14 @@ public final class Bitmap
 		tc = cm.getRGB(sprite[i]);
 		if(((getPixel
 		     (x+(i%scanSize),
-		      y+((int)(i/scanSize))))>>>24)<255)
+		      y+ i/scanSize))>>>24)<255)
 		    {
 			if(tc==color)
 			    setPixel(x+(i%scanSize), 
-				     y+((int)(i/scanSize)), 
-				     background.getPixelColor(x+(i%scanSize),y+((int)(i/scanSize))));
+				     y+ i/scanSize,
+				     background.getPixelColor(x+(i%scanSize),y+ i/scanSize));
 			else
-			    setPixel(x+(i%scanSize), y+((int)(i/scanSize)),tc);
+			    setPixel(x+(i%scanSize), y+ i/scanSize,tc);
 		    }
 	    }
     }    
@@ -227,8 +228,8 @@ public final class Bitmap
 
 	for(int i = 0; i < sprite.length; i++)
 		if(sprite[i] != color)
-		    setPixel(x+i/scanSize, y+((int)(i%scanSize)));;
-    }
+		    setPixel(x+i/scanSize, y+ i%scanSize);
+	}
 
 
     public synchronized void hideSprite
@@ -402,7 +403,7 @@ public final class Bitmap
 	e = -s/2 - 2 * b2 - a2;
 	ca = -6 * b2;
 	cd = ca - 4 * a2;
-	x = 0; y = 0 - yinc * b;
+	x = 0; y = -yinc * b;
 	drawEllipsePoint(xc, yc, x, y, fill);
 	
 	for( int i = 0; i < dxt; i++ )
@@ -610,12 +611,10 @@ public final class Bitmap
 	    {
 		x+=ix;
 		y+=iy;
-		plot = false;
 
-		if(x > inc)
+			if(x > inc)
 		    {
-			plot = true;
-			x-=inc;
+				x-=inc;
 			if( dx > 0 )
 			    plotx++;
 			else
@@ -624,8 +623,7 @@ public final class Bitmap
 
 		if(y > inc)
 		    {
-			plot = true;
-			y-=inc;
+				y-=inc;
 			if( dy > 0 )
 			    ploty++;
 			else
@@ -680,12 +678,10 @@ public final class Bitmap
 	    {
 		x+=ix;
 		y+=iy;
-		plot = false;
 
-		if(x > inc)
+			if(x > inc)
 		    {
-			plot = true;
-			x-=inc;
+				x-=inc;
 			if( dx > 0 )
 			    plotx++;
 			else
@@ -694,8 +690,7 @@ public final class Bitmap
 
 		if(y > inc)
 		    {
-			plot = true;
-			y-=inc;
+				y-=inc;
 			if( dy > 0 )
 			    ploty++;
 			else

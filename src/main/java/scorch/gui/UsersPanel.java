@@ -9,12 +9,10 @@ package scorch.gui;
 import java.awt.*;
 
 import scorch.*;
-import scorch.utility.*;
 import swindows.*;
 
 public class UsersPanel extends sWindow
 {
-    private Button btnCreate, btnWhois, btnHelp, btnLeave;
 
     public UsersPanel(int x, int y, int w, int h, ScorchApplet owner)
     {
@@ -24,10 +22,10 @@ public class UsersPanel extends sWindow
 	add(new List(), BorderLayout.CENTER);
 
 
-	btnCreate = new Button("Create Game");
-	btnWhois = new Button("Get user info");
-	btnHelp = new Button("Help");
-	btnLeave = new Button("Leave Scorch");
+        Button btnCreate = new Button("Create Game");
+        Button btnWhois = new Button("Get user info");
+        Button btnHelp = new Button("Help");
+        Button btnLeave = new Button("Leave Scorch");
 
 	Panel btnPanel = new Panel(new GridLayout(4, 1, 0, 5));
 	btnPanel.add(btnCreate);

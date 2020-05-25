@@ -8,7 +8,6 @@ package scorch.gui;
   resizes it correctly
 */
 
-import java.awt.*;
 import java.awt.event.*;
 import java.util.Random;
 
@@ -18,7 +17,7 @@ import swindows.*;
 
 public class ScorchFrame extends sWindow implements FocusListener
 {
-    private ScorchField scorch;
+    private final ScorchField scorch;
 
     public ScorchFrame(int w, int h, Random rand, ScorchApplet owner)
     {

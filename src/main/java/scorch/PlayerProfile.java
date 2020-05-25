@@ -65,12 +65,12 @@ public class PlayerProfile implements Serializable
 		this.tankType = Integer.parseInt(st.nextToken());
 		this.nRounds = Integer.parseInt(st.nextToken());
 		this.wind = Integer.parseInt(st.nextToken());
-		this.gravity = new Float(st.nextToken()).floatValue();
+		this.gravity = Float.parseFloat(st.nextToken());
 		this.initCash = Long.parseLong(st.nextToken());
-		this.hazards = (new Boolean(st.nextToken())).booleanValue();
+		this.hazards = Boolean.parseBoolean(st.nextToken());
 		this.timeCreation = Long.parseLong(st.nextToken());
 		this.timeAccess = Long.parseLong(st.nextToken());
-		this.sounds = (new Boolean(st.nextToken())).booleanValue();
+		this.sounds = Boolean.parseBoolean(st.nextToken());
 	    }
 	catch(NoSuchElementException  e)
 	    {
@@ -292,11 +292,9 @@ public class PlayerProfile implements Serializable
 
     public String makeLoginString()
     {
-	String result = 
-	    (isGuest() ? 
-	     password+Protocol.separator+name :
-	     name+Protocol.separator+password);
-	return result;
+        return (isGuest() ?
+         password+Protocol.separator+name :
+         name+Protocol.separator+password);
     }
 
     public String toString()

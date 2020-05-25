@@ -14,14 +14,12 @@ import java.util.*;
 
 import scorch.*;
 
-import scorch.utility.Debug;
-
 public class NapalmExplosion extends Explosion
 {		
-    private final int LIQUID = 0;
-    private final int FIRE = 1;
-    private final int CLEAR = 2;
-    
+    final int LIQUID = 0;
+	final int FIRE = 1;
+	final int CLEAR = 2;
+
     private final int black = Color.black.getRGB();
     private final int white = Color.white.getRGB();
 
@@ -43,10 +41,9 @@ public class NapalmExplosion extends Explosion
     private boolean first = true;
     
     private int 
-	pixelNum = HOT_NAPALM, 
-	fireDuration = HOT_NAPALM_DURATION,
-	burnoutDuration = 70,
-	fireHeight = 150;
+	pixelNum = HOT_NAPALM;
+    private int fireDuration = HOT_NAPALM_DURATION;
+    private int fireHeight = 150;
     //current level of napalm that is being expanded
     private int curLevel = -1;
 
@@ -99,7 +96,7 @@ public class NapalmExplosion extends Explosion
 
     public boolean drawNextFrame( boolean update )
     {
-	int pixelsUsed = 0;
+	int pixelsUsed;
 
 	if (first)
 	    {
@@ -122,7 +119,8 @@ public class NapalmExplosion extends Explosion
 	//Debug.calcFPSRate( );
 	bitmap.setColor( color );
 
-	switch ( state )
+        int burnoutDuration = 70;
+        switch ( state )
 	    {
 	    case LIQUID:
 		if (first)
@@ -230,7 +228,7 @@ public class NapalmExplosion extends Explosion
 		initFrames (frames[0], frames[1], 
 			    .10 + .18*(burnoutDuration > fireDuration ? 
 				 (1.0 * 
-				  (fireDuration > burnoutDuration/4 ? 
+				  (fireDuration > burnoutDuration /4 ?
 				   fireDuration : 0) / burnoutDuration) : 1 ), 
 			    frames[screen]);
 		
@@ -353,7 +351,7 @@ public class NapalmExplosion extends Explosion
 
     private void clearNapalm( int color )
     {
-	int pair[];
+	int[] pair;
 
 	bitmap.setColor( color );
 
@@ -378,7 +376,7 @@ public class NapalmExplosion extends Explosion
     {
 	int[][] filter = frames[screen];
 	int center_x = sp.getX() + sp.getWidth()/2, 
-	    center_y = sp.getY() + sp.getHeight()/2, damage = 0, dist = 0;
+	    center_y = sp.getY() + sp.getHeight()/2, damage = 0, dist;
 	
 
 	for (int i = 0; i < filter.length; i++)
@@ -398,13 +396,15 @@ public class NapalmExplosion extends Explosion
 
 class NapalmLine
 {
-    Bitmap bmp = null;
-    Vector pts_pairs = new Vector();
-    private int lm, rm, y;
+    final Bitmap bmp;
+    final Vector<int[]> pts_pairs = new Vector<>();
+    private int lm;
+	private int rm;
+	private final int y;
 
     public NapalmLine( int x, int y_coord, Bitmap bitmap )
     {
-	int pair[] = new int[2]; 
+	int[] pair = new int[2];
 	this.y = y_coord;
 	this.bmp = bitmap;
 	pair[0] = pair[1] = lm = rm = x;
@@ -424,7 +424,7 @@ class NapalmLine
 	//check if 'liquid' can flow to a lower level at one of the boundaries
 	for (int i = 0; i < pts_pairs.size(); i++)
 	    {
-		pair = (int[])pts_pairs.elementAt(i);
+		pair = pts_pairs.elementAt(i);
 		if ( bmp.isBackground( pair[0], y + 1) )
 		    return -pair[0];
 		if ( bmp.isBackground( pair[1], y + 1) )
@@ -437,7 +437,7 @@ class NapalmLine
 	//the posibilities on the same level
 	while ( (pixels == 0) && (count < pts_pairs.size()) )
 	    {
-		pair = (int[])pts_pairs.elementAt(expansion);//i
+		pair = pts_pairs.elementAt(expansion);//i
 		expansion = (++expansion) % pts_pairs.size();
 		count++;
 		if ( bmp.isBackground( pair[0] - 1, y ) )
@@ -460,7 +460,7 @@ class NapalmLine
     
     public void newPt( int x )
     {
-	int pair[] = new int[2]; 
+	int[] pair = new int[2];
 	pair[0] = pair[1] = x;
 	//DEBUG
 	//bmp.setColor( new Color( 254, 254, 0 ));
@@ -477,7 +477,7 @@ class NapalmLine
 	int[] pair = null;
 	for (int i = 0; i < pts_pairs.size(); i++)
 	    {
-		 pair = (int[])pts_pairs.elementAt(i);
+		 pair = pts_pairs.elementAt(i);
 		 bmp.drawLine(pair[0], y, pair[1], y);
 	    }
 	pair[0] = lm;  pair[1] = rm;
@@ -557,7 +557,7 @@ class NapalmColorModel extends ScorchColorModel
     {
 	//Produces smooth gradients from RGB_start to RGB_end
 	//(on the variable's names s = start and e = end
-	int index, max = (int)(end_index - start_index);
+	int index, max = end_index - start_index;
 	
 	float red_inc, green_inc, blue_inc;
 	

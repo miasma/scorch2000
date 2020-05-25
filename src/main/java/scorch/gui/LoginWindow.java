@@ -16,7 +16,9 @@ import swindows.*;
 
 public class LoginWindow extends sWindow implements ActionListener
 {
-    private TextField username, password, gpassword;
+    private final TextField username;
+	private final TextField password;
+	private final TextField gpassword;
 
     public LoginWindow(String name, ScorchApplet owner)
     {
@@ -101,7 +103,7 @@ public class LoginWindow extends sWindow implements ActionListener
 	
 	if( username.getText().equals("") )
 	    {
-		String b[] = {"OK"};
+		String[] b = {"OK"};
 		MessageBox msg = new MessageBox
 		    ("Error", "You must provide a user name",
 		     b, null, owner, this);
@@ -113,7 +115,7 @@ public class LoginWindow extends sWindow implements ActionListener
 	    {
 		if( username.getText().equals(Protocol.guest) )
 		    {
-			String b[] = {"OK"};
+			String[] b = {"OK"};
 			MessageBox msg = new MessageBox
 			    ("Error", 
 			     "Username "+Protocol.guest+" is reserved",
@@ -134,7 +136,7 @@ public class LoginWindow extends sWindow implements ActionListener
 	    {
 		if( username.getText().equals(Protocol.guest) )
 		    {
-			String b[] = {"OK"};
+			String[] b = {"OK"};
 			MessageBox msg = new MessageBox
 			    ("Error", 
 			     "Username "+Protocol.guest+" is reserved",
@@ -148,10 +150,8 @@ public class LoginWindow extends sWindow implements ActionListener
 				       username.getText()),
 		     gpassword.getText());
 		close();
-		return;
-	    }
-	return;
-    }
+		}
+	}
 
     public void close()
     {

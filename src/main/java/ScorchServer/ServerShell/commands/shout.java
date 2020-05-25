@@ -14,10 +14,10 @@ public class shout extends shellCommand
     public static String help = "shout something to all player in a game.";
     
     //arguments are ignored here for now.
-    public static void run(Vector args, Object owner)
+    public static void run(Vector<String> args, Object owner)
     {
 	ServerShell shell = (ServerShell)owner;
-	String message = "";
+	StringBuilder message = new StringBuilder();
 
 	if ( args.size() == 0 )
 	    {
@@ -32,7 +32,7 @@ public class shout extends shellCommand
 		    {
 			g = ScorchServer.findGameByID
 			    ( Integer.parseInt
-			      ( args.elementAt(0).toString())); 
+			      (args.elementAt(0)));
 		    }
 		catch( NumberFormatException e )
 		    {
@@ -40,7 +40,7 @@ public class shout extends shellCommand
 		    }
 		
 		for (int i = 1; i < args.size(); i++)
-		    message = message + " " + args.elementAt(i);
+		    message.append(" ").append(args.elementAt(i));
 		
 		if (g == null)
 		    shell.println("No such game: " + args.elementAt(0));

@@ -24,9 +24,7 @@ public class ScorchMain {
             if (args[idx].startsWith("--")) {
                 if (args[idx].equals("--server")) {
                     String[] serverArgs = new String[args.length - idx - 1];
-                    for (int i = 0; i < serverArgs.length; i++) {
-                        serverArgs[i] = args[idx + i];
-                    }
+                    System.arraycopy(args, idx, serverArgs, 0, serverArgs.length);
 
                     ScorchServer.main(serverArgs);
                     return;

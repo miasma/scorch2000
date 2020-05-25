@@ -8,6 +8,8 @@ package scorch;
 */
 
 import java.awt.Color;
+import java.util.Arrays;
+
 import scorch.Bitmap;
 
 public class Tanks
@@ -138,9 +140,8 @@ public class Tanks
 			else
 			    tank[i][j] = tanks[n][i][j];
 		}
-	
-	for(int i = 0; i < tank[0].length; i++)
-	    tank[0][i] = tank[0][3];
+
+		Arrays.fill(tank[0], tank[0][3]);
 	
 	return tank;
     }

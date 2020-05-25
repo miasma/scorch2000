@@ -11,15 +11,17 @@ package scorch;
 
 public class Dropper
 {
-    private Bitmap bitmap;
-    private int groundColor;
-    private int startx, endx, width, height;
+    private final Bitmap bitmap;
+    private final int groundColor;
+    private final int startx;
+    private final int endx;
+    private final int height;
 
     public Dropper(Bitmap bitmap, int startx, int endx)
     {
 	this.bitmap = bitmap;
 
-	this.width = bitmap.getWidth();
+        int width = bitmap.getWidth();
 	this.height = bitmap.getHeight();
 
 	this.startx = Math.max(0, startx);

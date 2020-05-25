@@ -5,8 +5,6 @@ package scorch.weapons;
   Author: Mikhail Kruk
 */
 
-import java.util.Random;
-
 public class FunkyNuke extends Weapon
 {
     public FunkyNuke()

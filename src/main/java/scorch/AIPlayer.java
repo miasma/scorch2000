@@ -15,18 +15,16 @@ import scorch.utility.Debug;
 
 public class AIPlayer extends ScorchPlayer implements Runnable
 {
-    public static String[] names = {"Shooter", "Cyborg", "Killer"};
-    public static int numAI = names.length;
+    public static final String[] names = {"Shooter", "Cyborg", "Killer"};
+    public static final int numAI = names.length;
 
-    private static long[] bounty = {10000, 20000, 30000};
-    private static int[] accuracy = {5, 4, 2}; // lower is better
-    private static double[] rfactor = {3.0, 2.0, 1.5};
+    private static final long[] bounty = {10000, 20000, 30000};
+    private static final int[] accuracy = {5, 4, 2}; // lower is better
+    private static final double[] rfactor = {3.0, 2.0, 1.5};
 
     private int type; // ai type, index in the above arrays
 
-    private Thread thread;
-
-    public AIPlayer(int id, PlayerProfile profile, ScorchApplet owner)
+	public AIPlayer(int id, PlayerProfile profile, ScorchApplet owner)
     {
 	super(id, profile, owner);
 	
@@ -71,7 +69,7 @@ public class AIPlayer extends ScorchPlayer implements Runnable
 
     private void aimedFire()
     {
-	thread = new Thread(this, "ai-aimer-thread");
+		Thread thread = new Thread(this, "ai-aimer-thread");
 	thread.start();
     }
 
@@ -134,8 +132,8 @@ public class AIPlayer extends ScorchPlayer implements Runnable
 		
 		missile = new RoundMissile
 		    (bitmap,
-		     new Physics((int)(getTurretX(2.0)), 
-				 (int)(bitmap.getHeight()-getTurretY(2.0)),
+		     new Physics(getTurretX(2.0),
+					 bitmap.getHeight()-getTurretY(2.0),
 				 angle, getPower() / 8.0),
 		     new SimpleExplosion
 			 (bitmap,(int)(SimpleExplosion.MISSILE*radiusFactor)));
@@ -145,10 +143,10 @@ public class AIPlayer extends ScorchPlayer implements Runnable
 
 		try 
 		    {
-			Thread.currentThread().sleep(3);
+			Thread.sleep(3);
 		    }
-		catch(InterruptedException e) {};
-	    }
+		catch(InterruptedException e) {}
+		}
 	while( (ei == null || 
 		scorchField.killTanks(missile, this, true) <= 0) && 
 	       (curAngle != startAngle || curPower != startPower));

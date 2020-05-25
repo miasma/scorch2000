@@ -16,11 +16,11 @@ import swindows.*;
 
 public class PlayersListControl extends sWindow implements PlayersLister
 {
-    private PlayersPanel pp;
-    private ScorchPlayer myself;
+    private final PlayersPanel pp;
+    private final ScorchPlayer myself;
 
     public PlayersListControl
-	(Vector players, ScorchPlayer myself, sWindow owner)
+	(Vector<ScorchPlayer> players, ScorchPlayer myself, sWindow owner)
     {
         super(-1,-1,0,0,null,owner);
 
@@ -74,14 +74,14 @@ public class PlayersListControl extends sWindow implements PlayersLister
 class PlayersPanel extends Panel
 {
     private Image backBuffer = null;
-    private Vector players;
+    private final Vector<ScorchPlayer> players;
     private int fontHeight;
     private Graphics backBufferG;
-    private PlayersListControl owner;
+    private final PlayersListControl owner;
 
     private ScorchPlayer highlighted;
 
-    public PlayersPanel(Vector players, PlayersListControl owner)
+    public PlayersPanel(Vector<ScorchPlayer> players, PlayersListControl owner)
     {
 	this.players = players;
 	this.owner = owner;
@@ -127,13 +127,13 @@ class PlayersPanel extends Panel
 	backBufferG.setColor(Color.gray);
 	backBufferG.fillRect(0,0,d.width, d.height);
 	
-	int vs = (d.height-2*owner.wndBorder) / ScorchPlayer.MAX_PLAYERS;
+	int vs = (d.height-2* sPanel.wndBorder) / ScorchPlayer.MAX_PLAYERS;
 	if( vs > fontHeight ) //+ owner.wndBorder )
 	    vs = fontHeight ; //+ owner.wndBorder;
 
 	for(int i = 0; i < players.size(); i++)
 	    {
-		ScorchPlayer sp = (ScorchPlayer)players.elementAt(i);
+		ScorchPlayer sp = players.elementAt(i);
 		if( !sp.isAlive() )
 		    backBufferG.setColor(Color.black);
 		else
@@ -141,7 +141,7 @@ class PlayersPanel extends Panel
 		
 		t = sp.getName();
 		t = t.substring(0, Math.min(12, t.length()));
-		backBufferG.drawString(t, 2*owner.wndBorder, (i+1)* vs);
+		backBufferG.drawString(t, 2* sPanel.wndBorder, (i+1)* vs);
 		
 		if( sp == owner.getMyself() )
 		    {
@@ -150,24 +150,24 @@ class PlayersPanel extends Panel
 			
 			backBufferG.setColor(Color.white);
 			backBufferG.drawLine
-			    (2*owner.wndBorder, (i+1)* vs+1,
-			     2*owner.wndBorder+lineWidth, (i+1)* vs+1);
+			    (2* sPanel.wndBorder, (i+1)* vs+1,
+			     2* sPanel.wndBorder +lineWidth, (i+1)* vs+1);
 		    }
 
 		if( highlighted == sp )
 		    {
 			backBufferG.setColor(Color.white);
 			backBufferG.drawRect
-			    (2*owner.wndBorder-2, i * vs + 2,
-			     d.width + 2-4*owner.wndBorder, vs);
+			    (2* sPanel.wndBorder -2, i * vs + 2,
+			     d.width + 2-4* sPanel.wndBorder, vs);
 			backBufferG.setColor(Color.lightGray);
-			backBufferG.drawLine(2*owner.wndBorder-2,
+			backBufferG.drawLine(2* sPanel.wndBorder -2,
 					     i * vs + 2 + vs, 
-					     d.width -2*owner.wndBorder,
+					     d.width -2* sPanel.wndBorder,
 					     i * vs + 2 + vs);
-			backBufferG.drawLine(d.width -2*owner.wndBorder,
+			backBufferG.drawLine(d.width -2* sPanel.wndBorder,
 					     i * vs + 2,
-					     d.width -2*owner.wndBorder,
+					     d.width -2* sPanel.wndBorder,
 					     i * vs + 2 + vs);
 		    }
 	    }

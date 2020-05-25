@@ -15,8 +15,11 @@ import swindows.*;
 
 public class NewUser extends sWindow implements ActionListener
 {
-    private TextField username, password1, password2, email;
-    private PlayerProfile profile;
+    private final TextField username;
+	private final TextField password1;
+	private final TextField password2;
+	private final TextField email;
+    private final PlayerProfile profile;
 
     public NewUser(String name, ScorchApplet owner)
     {
@@ -119,7 +122,7 @@ public class NewUser extends sWindow implements ActionListener
 	
 	if( username.getText().equals("") )
 	    {
-		String b[] = {"OK"};
+		String[] b = {"OK"};
 		MessageBox msg = new MessageBox
 		    ("Error", "You must provide a user name", 
 		     b, null, owner, this);
@@ -128,7 +131,7 @@ public class NewUser extends sWindow implements ActionListener
 	    }
 	if( username.getText().equals(Protocol.guest) )
 	    {
-		String b[] = {"OK"};
+		String[] b = {"OK"};
 		MessageBox msg = new MessageBox
 		    ("Error", 
 		     "Username "+Protocol.guest+" is reserved", 
@@ -138,7 +141,7 @@ public class NewUser extends sWindow implements ActionListener
 	    }
 	if( !password1.getText().equals(password2.getText()) )
 	    {
-		String b[] = {"OK"};
+		String[] b = {"OK"};
 		MessageBox msg = new MessageBox
 		    ("Error", "Passwords do not match. Please reenter",
 		     b, null, owner, this);
@@ -149,7 +152,7 @@ public class NewUser extends sWindow implements ActionListener
 	    }
 	if( password1.getText().equals("") && profile == null )
 	    {
-		String b[] = {"OK"};
+		String[] b = {"OK"};
 		MessageBox msg = new MessageBox
 		    ("Error", "You must enter a password", 
 		     b, null, owner, this);
@@ -177,8 +180,7 @@ public class NewUser extends sWindow implements ActionListener
 		    }
 		
 		close();
-		return;
-	    }
+		}
     }
     public void close()
     {

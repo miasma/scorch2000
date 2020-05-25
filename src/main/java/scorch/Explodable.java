@@ -13,6 +13,6 @@ import scorch.weapons.ExplosionInfo;
         
 public interface Explodable extends FrameShow 
 {
-    public ExplosionInfo getExplosionInfo();
-    public int calculateDamage(ScorchPlayer sp);
+    ExplosionInfo getExplosionInfo();
+    int calculateDamage(ScorchPlayer sp);
 }

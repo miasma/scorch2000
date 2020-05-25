@@ -11,14 +11,13 @@ package scorch.weapons;
 import java.awt.*;
 import java.awt.event.*;
 import java.util.Random;
-import java.lang.reflect.*;
 
 import scorch.*;
 import scorch.items.*;
 
 public abstract class Weapon extends Item
 {
-    private static String pkgName = "scorch.weapons.";
+    private static final String pkgName = "scorch.weapons.";
 
     public static final int Missile = 0, 
 	BabyNuke = 1, Nuke = 2,
@@ -27,7 +26,7 @@ public abstract class Weapon extends Item
 	FunkyBomb = 10, FunkyNuke = 11,
 	Napalm = 12, HotNapalm = 13, MIRV = 14, DeathHead = 15;
 
-    private static final String names[] = {
+    private static final String[] names = {
 	"Missile", "Baby Nuke", "Nuke",
 	"Sand Bomb", 
 	"Baby Roller", "Roller", "Heavy Roller", 
@@ -73,7 +72,7 @@ public abstract class Weapon extends Item
 	    {
 		// for Netscape again
 		Explosion expl = (Explosion)Class.forName
-		    (pkgName+explosionClass).newInstance();
+		    (pkgName+explosionClass).getConstructors()[0].newInstance();
 
 		expl.setBitmap(bitmap);
 		//expl.setPosition(0,0);
@@ -94,7 +93,7 @@ public abstract class Weapon extends Item
     // (spaces in names are omitted)
     public static Weapon[] loadWeapons(ScorchPlayer sp)
     {
-	Weapon result[] = new Weapon[names.length];
+	Weapon[] result = new Weapon[names.length];
 
 	try
 	    {
@@ -102,7 +101,7 @@ public abstract class Weapon extends Item
 		    {
 			String name = trimSpaces(pkgName, names[i]);
 			
-			result[i] = (Weapon)Class.forName(name).newInstance();
+			result[i] = (Weapon)Class.forName(name).getConstructors()[0].newInstance();
 			result[i].scorchPlayer = sp;
 		    }
 	    }
@@ -119,7 +118,7 @@ public abstract class Weapon extends Item
 // weapon. For most of them (all?) it should be just "select" button
 class WeaponControl extends ItemControl implements ActionListener
 {
-    protected int type;
+    protected final int type;
 
     public WeaponControl(int type, ScorchApplet owner)
     {

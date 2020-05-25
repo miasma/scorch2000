@@ -8,7 +8,6 @@ package swindows;
 */
 
 import java.awt.*;
-import java.awt.event.*;
 
 public class sWindow extends sPanel 
 {
@@ -17,7 +16,7 @@ public class sWindow extends sPanel
     private Image dragBuffer;
 
     protected String name; // windows name
-    protected Container owner; // each window has an owner
+    protected final Container owner; // each window has an owner
     
     private Component border;
     
@@ -25,7 +24,7 @@ public class sWindow extends sPanel
 
     // all the components are inserted into the mainPanel, not in the 
     // sWindow directly
-    public Container mainPanel;     
+    public final Container mainPanel;
 
     public sWindow(int x, int y, int w, int h, String name, 
 		   Color bkColor, Color textColor, Container owner)

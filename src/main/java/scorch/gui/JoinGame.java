@@ -16,8 +16,8 @@ import scorch.*;
 
 public class JoinGame extends PlayersList implements ActionListener
 {
-    private TankSelection tankSelection;
-    private Checkbox sounds;
+    private final TankSelection tankSelection;
+    private final Checkbox sounds;
 
     public JoinGame(PlayerProfile profile, ScorchApplet owner)
     {
@@ -85,8 +85,6 @@ public class JoinGame extends PlayersList implements ActionListener
 	if( cmd.equals("Cancel") )
 	    {
 		((ScorchApplet)owner).Quit();
-		return;
-	    }
-	return;
+		}
     }
 }

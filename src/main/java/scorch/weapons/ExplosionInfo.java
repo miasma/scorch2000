@@ -27,8 +27,7 @@ public class ExplosionInfo
 
     public String toString()
     {
-	String res = "ExplosionInfo: rectangle: "+explosionArea;
 
-	return res;
+        return "ExplosionInfo: rectangle: "+explosionArea;
     }
 }

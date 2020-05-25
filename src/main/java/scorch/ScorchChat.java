@@ -19,13 +19,13 @@ class ScorchChat implements Runnable
     private static final int DELAY = 7500; // ms
     private static final int MAX_LINES = 8; 
 
-    private String[] chat = new String[MAX_LINES];
-    private Color chatColor = null;
+    private final String[] chat = new String[MAX_LINES];
+    private final Color chatColor;
     private FontMetrics fm = null;
     private int fontHeight = -1, curChatLine = 0;
 
     private Thread thread;
-    private ScorchField owner;
+    private final ScorchField owner;
 
     public ScorchChat(ScorchField owner, Background bk)
     {
@@ -78,7 +78,7 @@ class ScorchChat implements Runnable
     {
 	boolean done = false;
 	String next_msg;
-	int stringWidth, screenWidth, new_length, new_width;
+	int screenWidth, new_length, new_width;
 	int[] font_width;
 
 	// get the maximum allowed string length. note that I've used
@@ -93,7 +93,7 @@ class ScorchChat implements Runnable
 	    {
 		msg = next_msg;
 		if( fm != null && 
-		    (stringWidth = fm.stringWidth(msg)) > screenWidth )
+		    (fm.stringWidth(msg)) > screenWidth )
 		    {			
 			font_width = fm.getWidths();
 			new_width = 0; new_length = 0;
@@ -140,8 +140,7 @@ class ScorchChat implements Runnable
 
     private synchronized void dropLastLine()
     {
-	for(int i = 1; i < MAX_LINES; i++)
-	    chat[i-1] = chat[i];
+		System.arraycopy(chat, 1, chat, 0, MAX_LINES - 1);
 	curChatLine--;
     }
 
@@ -151,7 +150,7 @@ class ScorchChat implements Runnable
 	    {
 		try
 		    {
-			Thread.currentThread().sleep(DELAY);
+			Thread.sleep(DELAY);
 		    }
 		catch(InterruptedException e)
 		    {

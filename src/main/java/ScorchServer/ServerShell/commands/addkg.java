@@ -17,7 +17,7 @@ public class addkg extends shellCommand
     public static String help = "To add kills/gain to player's profile.";
 
     //arguments are ignored here for now.
-    public static void run(Vector args, Object owner)
+    public static void run(Vector<String> args, Object owner)
     {
 	ServerShell shell = (ServerShell)owner;
 	String password = "";
@@ -30,10 +30,10 @@ public class addkg extends shellCommand
 	
 	try
 	    {
-		p = ScorchServer.lookupPlayer( (String)args.elementAt(0) );
+		p = ScorchServer.lookupPlayer(args.elementAt(0));
 		
 		if (p == null)
-		    shell.println("Player " + (String)args.elementAt(0)
+		    shell.println("Player " + args.elementAt(0)
 				  +" does not exist.\n");
 		else
 		    {
@@ -43,10 +43,10 @@ public class addkg extends shellCommand
 			    {
 				p.setOverallKills
 				    ( p.getOverallKills() + Integer.parseInt
-				      ( args.elementAt(1).toString() ) );
+				      (args.elementAt(1)) );
 				p.setOverallGain
 				    ( p.getOverallGain() + Integer.parseInt
-				      ( args.elementAt(2).toString() ) );
+				      (args.elementAt(2)) );
 			    }
 			ScorchServer.changeProfile(p);
 		    }

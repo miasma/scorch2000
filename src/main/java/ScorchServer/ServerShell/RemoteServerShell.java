@@ -10,7 +10,6 @@ package ScorchServer.ServerShell;
 
 import java.io.*;
 import java.net.*;
-import java.util.*;
 
 public class RemoteServerShell implements Runnable
 {
@@ -35,8 +34,7 @@ public class RemoteServerShell implements Runnable
 
 			initStreams();
 			
-			if (accept.getInetAddress().getHostName().
-			    toString().equals("localhost"))
+			if (accept.getInetAddress().getHostName().equals("localhost"))
 			    new Thread(new ServerShell(in, out, accept))
 				.start();
 			else

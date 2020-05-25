@@ -21,7 +21,7 @@ public class PlayersList extends sWindow implements PlayersLister, Runnable
     protected int timeLeft = 0;
     protected Thread thread;
 
-    protected List players;    
+    protected final List players;
 
     public PlayersList(String name, ScorchApplet owner)
     {
@@ -61,7 +61,7 @@ public class PlayersList extends sWindow implements PlayersLister, Runnable
 		((ScorchApplet)owner).setTimerLabel(timeLeft);
 		try
 		    {
-			Thread.currentThread().sleep(1000);
+			Thread.sleep(1000);
 		    }
 		catch(InterruptedException e) {}
 		timeLeft--;

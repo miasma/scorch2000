@@ -8,10 +8,8 @@ package scorch.gui;
   that contains the list of the players
 */
 
-import java.awt.*;
-
 public interface PlayersLister
 {
-    public void addPlayer(String name);
-    public void removePlayer(String name);
+    void addPlayer(String name);
+    void removePlayer(String name);
 }

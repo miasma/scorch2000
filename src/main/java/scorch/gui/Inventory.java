@@ -19,7 +19,7 @@ import swindows.*;
 
 public class Inventory extends sWindow implements ActionListener, KeyListener
 {
-    protected ScorchPlayer myPlayer;
+    protected final ScorchPlayer myPlayer;
 
     public Inventory(ScorchApplet owner)
     {
@@ -32,14 +32,12 @@ public class Inventory extends sWindow implements ActionListener, KeyListener
    
 	myPlayer = owner.getMyPlayer();
 
-	Vector panels = new Vector();
+	Vector<Panel> panels = new Vector<>();
 	int count = 0;
 
 	loadPanels(panels);
-	
-	count = panels.size();
 
-	Panel b = new Panel(new FlowLayout(FlowLayout.CENTER));
+		Panel b = new Panel(new FlowLayout(FlowLayout.CENTER));
 	Button bOK = new Button("OK");
 	b.add(bOK);
 	
@@ -49,13 +47,13 @@ public class Inventory extends sWindow implements ActionListener, KeyListener
 	// take max number of rows we can display
 	// assume that Inventory box should be <= 70% of the applet
 	Panel t = new Panel(new FlowLayout());
-	t.add((Component)panels.elementAt(0));
+	t.add(panels.elementAt(0));
 	t.setVisible(false);
 	owner.add(t);
 	t.validate();
 
 	int rows = (int)(owner.getHeight()*0.7) / 
-	    ((Component)panels.elementAt(0)).getSize().height;
+	    panels.elementAt(0).getSize().height;
 	
 	owner.remove(t); t.removeAll();
 	
@@ -67,17 +65,17 @@ public class Inventory extends sWindow implements ActionListener, KeyListener
 	add(b, BorderLayout.SOUTH);
     }
 
-    protected void loadPanels(Vector panels)
+    protected void loadPanels(Vector<Panel> panels)
     {
-	Weapon weapons[] = myPlayer.getWeapons();
-	Item items[] = myPlayer.getItems();    
+	Weapon[] weapons = myPlayer.getWeapons();
+	Item[] items = myPlayer.getItems();
 
 	loadPanels(panels, weapons);
 	loadPanels(panels, items);
     }
     
     // build a list of panels which correspond to items vector
-    protected void loadPanels(Vector panels, Item[] items)
+    protected void loadPanels(Vector<Panel> panels, Item[] items)
     {
 	Panel pp;
 
@@ -116,15 +114,13 @@ public class Inventory extends sWindow implements ActionListener, KeyListener
     public void actionPerformed(ActionEvent evt)
     {
 	close();
-	return;
-    }
+	}
 
     public void keyPressed(KeyEvent evt)
     {
 	if( evt.getKeyCode() == KeyEvent.VK_ESCAPE )
 	    close();
-	return;
-    }
+	}
 
     public void keyReleased(KeyEvent evt) {}
     public void keyTyped(KeyEvent evt) {}

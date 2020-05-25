@@ -9,6 +9,5 @@ import java.util.Vector;
 
 public abstract class shellCommand
 {
-    public static void run(Vector args, Object owner)
-    {}
+    //public void run(Vector<String> args, Object owner) {}
 }

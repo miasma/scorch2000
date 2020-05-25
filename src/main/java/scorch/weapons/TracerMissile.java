@@ -12,7 +12,7 @@ import scorch.*;
 
 public class TracerMissile extends GenericMissile
 {
-    private static int[][] funkyParticle = {{w}}; // fake missile image
+    private static final int[][] funkyParticle = {{w}}; // fake missile image
 
     public TracerMissile(Bitmap bitmap, Physics physics, Explosion explosion)
     {

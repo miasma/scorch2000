@@ -11,9 +11,9 @@ import java.awt.image.ColorModel;
 
 public class ScorchColorModel extends ColorModel
 {
-    protected int r[] = new int[256];
-    protected int g[] = new int[256];
-    protected int b[] = new int[256];
+    protected final int[] r = new int[256];
+    protected final int[] g = new int[256];
+    protected final int[] b = new int[256];
     
     public ScorchColorModel( )
     {  

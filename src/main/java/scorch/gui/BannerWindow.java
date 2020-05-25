@@ -14,7 +14,7 @@ import swindows.*;
 
 public class BannerWindow extends sWindow implements ActionListener
 {
-    private String address;
+    private final String address;
 
     public BannerWindow(ScorchApplet owner, String image, String address)
     {
@@ -72,27 +72,25 @@ public class BannerWindow extends sWindow implements ActionListener
 	    ((ScorchApplet)owner).banner(null);
 
 	close();
-	return;
-    }
+	}
 }
 
 class Banner extends Canvas implements MouseListener
 {
-    private String bannerImage; // = "b1.gif";
-    private String url; // = "http://www.commission-junction.com/track/track.dll?AID=538392&PID=542124&URL=http%3A%2F%2Fwww%2Etechsumer%2Ecom";
-    private Image banner;
+	private final String url; // = "http://www.commission-junction.com/track/track.dll?AID=538392&PID=542124&URL=http%3A%2F%2Fwww%2Etechsumer%2Ecom";
+    private final Image banner;
 
-    private BannerWindow owner;
+    private final BannerWindow owner;
 
     Banner(BannerWindow owner, String image, String address)
     {
 	super();
 	this.owner = owner;
-	this.bannerImage = image;
-	this.url = address;
+		// = "b1.gif";
+		this.url = address;
 	
 	MediaTracker tracker = new MediaTracker(this);
-	banner = ScorchApplet.getImage(bannerImage);
+	banner = ScorchApplet.getImage(image);
 	tracker.addImage(banner,0);
 	
 	try

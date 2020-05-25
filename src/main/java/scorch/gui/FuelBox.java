@@ -16,11 +16,10 @@ import swindows.*;
 
 public class FuelBox extends sWindow implements ActionListener
 {
-    private sGauge fuelGauge;
-    private Fuel fuel;
-    private ScorchPlayer player;
+    private final Fuel fuel;
+    private final ScorchPlayer player;
 
-    private Dimension od;
+    private final Dimension od;
 
     public FuelBox(ScorchApplet owner)
     {
@@ -31,8 +30,8 @@ public class FuelBox extends sWindow implements ActionListener
 	this.player = owner.getMyPlayer();
 	this.fuel = (Fuel)player.getItems()[Item.Fuel];
 
-	fuelGauge = new 
-	    sGauge(fuel.getQuantity(), fuel.getMaxQuantity(), owner);
+        sGauge fuelGauge = new
+                sGauge(fuel.getQuantity(), fuel.getMaxQuantity(), owner);
 
 	fuel.setGauge(fuelGauge);
 
@@ -63,8 +62,8 @@ public class FuelBox extends sWindow implements ActionListener
 	if( fuel.getQuantity() <= 0 )
 	    {
 		//close();
-		String b[] = {"OK"};
-		String c[] = {null};
+		String[] b = {"OK"};
+		String[] c = {null};
 		MessageBox msg = new MessageBox
 		    ("Message",
 		     "You are out of fuel!",
@@ -94,8 +93,7 @@ public class FuelBox extends sWindow implements ActionListener
 	if( ">".equals(cmd) )
 	    {
 		move(1);
-		return;
-	    }
+        }
     }
 
     public boolean handleEvent(Event evt)

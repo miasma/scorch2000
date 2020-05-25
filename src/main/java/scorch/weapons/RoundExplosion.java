@@ -14,10 +14,8 @@ package scorch.weapons;
 */
 
 import java.awt.*;
-import java.util.Random;
 
 import scorch.*;
-import scorch.utility.Debug;
 
 public abstract class RoundExplosion extends Explosion
 {
@@ -65,7 +63,7 @@ public abstract class RoundExplosion extends Explosion
 	// maybe (?) multiply by 2 becaue there is actually some damage
 	// on the edge of explosion. may be it should depend on weapon?
 	if( splash_radius > distance )
-	    return (int)(sp.maxPower - (sp.maxPower*distance)/splash_radius);
+	    return (int)(ScorchPlayer.maxPower - (ScorchPlayer.maxPower *distance)/splash_radius);
 	else
 	    return 0;
     }

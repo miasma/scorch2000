@@ -12,7 +12,6 @@ import java.awt.*;
 import java.awt.event.*;
 
 import swindows.sGauge;
-import scorch.utility.*;
 import scorch.ScorchApplet;
 
 public class Fuel extends Item

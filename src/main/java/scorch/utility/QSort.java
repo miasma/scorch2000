@@ -29,6 +29,8 @@
  * redistribute the Software for such purposes.
  */
 
+package scorch.utility;
+
 /**
  * A quick sort demonstration algorithm
  * SortAlgorithm.java
@@ -40,9 +42,6 @@
  * modified Mikhail Kruk (for Scorched Earth 2000) 23 March 2000
  *
  */
-
-package scorch.utility;
-
 public class QSort 
 {
    /** This is a generic version of C.A.R Hoare's Quick Sort 
@@ -59,9 +58,7 @@ public class QSort
     * @param lo0     left boundary of array partition
     * @param hi0     right boundary of array partition
     */
-  static void QuickSort(long a[], int lo0, int hi0, int index[]) 
-       throws Exception
-   {
+  static void QuickSort(long[] a, int lo0, int hi0, int[] index) {
       int lo = lo0;
       int hi = hi0;
       long mid;
@@ -113,7 +110,7 @@ public class QSort
       }
    }
 
-   private static void swap(long a[], int i, int j, int index[])
+   private static void swap(long[] a, int i, int j, int[] index)
    {
       long T;
       int TI;
@@ -127,8 +124,7 @@ public class QSort
       index[j] = TI;
    }
 
-   public static int[] sort(long a[]) throws Exception
-   {
+   public static int[] sort(long[] a) {
        int[] index = new int[a.length];
        for(int i = 0; i < index.length; i++)
 	   index[i] = i;

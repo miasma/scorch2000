@@ -14,7 +14,7 @@ import swindows.*;
 
 public class SystemMenu extends sWindow
 {
-    private Button mkill, editProfile, deleteProfile, topTen;
+    private final Button mkill;
 
     public SystemMenu(ScorchApplet owner)
     {
@@ -23,16 +23,16 @@ public class SystemMenu extends sWindow
 	Panel p = new Panel();
 	p.setLayout(new GridLayout(9,1,0,5));
 	p.add(new Button("Statistics"));
-	topTen = new Button("Top 10 players");
+        Button topTen = new Button("Top 10 players");
 	topTen.setEnabled(true);
 	p.add(topTen);
 	mkill = new Button("Mass kill");
 	mkill.setEnabled(owner.isMaster());
 	p.add(mkill);
-	editProfile = new Button("Edit profile");
+        Button editProfile = new Button("Edit profile");
 	editProfile.setEnabled(!owner.isGuest());
 	p.add(editProfile);
-	deleteProfile = new Button("Delete profile");
+        Button deleteProfile = new Button("Delete profile");
 	deleteProfile.setEnabled(false && !owner.isGuest());
 	p.add(deleteProfile);
 	p.add(new Button("About Scorch"));
@@ -114,8 +114,8 @@ public class SystemMenu extends sWindow
 		    {
 			close();
 
-			String b[] = {"Yes", "Cancel"};
-			String c[] = {"massKill", null};
+			String[] b = {"Yes", "Cancel"};
+			String[] c = {"massKill", null};
 			MessageBox msg = new MessageBox
 			    ("Confirmation", "Are you sure you want to kill everybody and start a new round?",
 			     b, c, owner, this);

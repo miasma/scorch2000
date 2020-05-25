@@ -15,7 +15,7 @@ public class whois extends shellCommand
     public static String help = "To get detailed description of the player (name/email/resolution etc.)";
 
     //arguments are ignored here for now.
-    public static void run(Vector args, Object owner)
+    public static void run(Vector<String> args, Object owner)
     {
 	ServerShell shell = (ServerShell)owner;
 	String message = null;
@@ -31,16 +31,16 @@ public class whois extends shellCommand
 	    {
 		if (args.size() == 1)
 		    p = ScorchServer.findPlayerByName
-			((String)args.elementAt(0));
+			(args.elementAt(0));
 		else
 		    {
 			g = ScorchServer.findGameByID
 			    ( Integer.parseInt
-			      ( args.elementAt(0).toString())); 
+			      (args.elementAt(0)));
 			
 			p = g.findPlayerByID
 			    ( Integer.parseInt
-			      ( args.elementAt(1).toString())); 
+			      (args.elementAt(1)));
 		    }
 
 		if (p == null)

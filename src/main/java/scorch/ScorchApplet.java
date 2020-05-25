@@ -22,22 +22,21 @@ import swindows.*;
 
 public class ScorchApplet extends Applet implements FocusListener
 {
-    public static String Version = "v1.061, 4/11/2001";
+    public static final String Version = "v1.061, 4/11/2001";
 
     public static boolean sounds = false;
 
     private Random rand;
-    private static String paramWidth = "gameWidth", 
-	paramHeight = "gameHeight",
-	paramPort = "port",                             // server port
-	paramLeaveURL = "leaveURL",
-	paramHelpURL = "helpURL",
-	paramDev = "dev",                               // development version
-	paramDT = "dt",                                 // desync test
-	paramBanners = "banners";
-    
+    private static final String paramWidth = "gameWidth";
+	private static final String paramHeight = "gameHeight";
+	private static final String paramPort = "port";                             // server port
+	private static final String paramLeaveURL = "leaveURL";
+	private static final String paramHelpURL = "helpURL";
+	// development version
+	// desync test
 
-    private static ScorchApplet saInstance = null;
+
+	private static ScorchApplet saInstance = null;
 
     private URL leaveURL, helpURL;
     
@@ -48,7 +47,7 @@ public class ScorchApplet extends Applet implements FocusListener
     private ScorchField scorch;
     private ScorchFrame scorchFrame;
     private Network network;
-    private Vector players;
+    private Vector<ScorchPlayer> players;
     private PlayersLister playersList;
     private GameSettings gameSettings;
     private MessageBox msg;
@@ -61,7 +60,7 @@ public class ScorchApplet extends Applet implements FocusListener
     private boolean paid = false;
     private ScorchPlayer myPlayer;
 
-    private Vector banners, bannersURL;
+    private Vector<String> banners, bannersURL;
     private Label timerLabel;
 
     public boolean GalslaMode = false;
@@ -181,16 +180,14 @@ public class ScorchApplet extends Applet implements FocusListener
     
     public String[][] getParameterInfo()
     {
-	String[][] info = 
-	{
-	    {paramWidth, "int", "game field width"},
-	    {paramHeight, "int", "game field height"},
-	    {paramPort, "int", "port on which to connect to the server"},
-	    {paramLeaveURL, "String", "url of the Scorch start page"},
-	    {paramHelpURL, "String", "url of the Scorch on-line help"}
-	};
-	
-	return info;
+
+		return new String[][]{
+			{paramWidth, "int", "game field width"},
+			{paramHeight, "int", "game field height"},
+			{paramPort, "int", "port on which to connect to the server"},
+			{paramLeaveURL, "String", "url of the Scorch start page"},
+			{paramHelpURL, "String", "url of the Scorch on-line help"}
+		};
     } 
 
     private void getParameters()
@@ -199,21 +196,23 @@ public class ScorchApplet extends Applet implements FocusListener
 	
 	param = getParameter(paramWidth);
 	if( param != null )
-	    gameWidth = (new Integer(param)).intValue();
+	    gameWidth = Integer.parseInt(param);
 
 	param = getParameter(paramHeight);
 	if( param != null )
-	    gameHeight = (new Integer(param)).intValue();
+	    gameHeight = Integer.parseInt(param);
 
 	param = getParameter(paramPort);
 	if( param != null )
-	    port = (new Integer(param)).intValue();
+	    port = Integer.parseInt(param);
 
-	param = getParameter(paramDev);
+		String paramDev = "dev";
+		param = getParameter(paramDev);
 	if( param != null )
 	    Debug.dev = param.equals("true");
-	
-	param = getParameter(paramDT);
+
+		String paramDT = "dt";
+		param = getParameter(paramDT);
 	if( param != null )
 	    Debug.desyncTest = param.equals("true");
 	
@@ -231,11 +230,12 @@ public class ScorchApplet extends Applet implements FocusListener
 		else
 		    helpURL = new URL("http://www.scorch2000.com/");
 
-		param = getParameter(paramBanners);
+			String paramBanners = "banners";
+			param = getParameter(paramBanners);
 		if( param != null )
 		    {
-			banners = new Vector();
-			bannersURL = new Vector();
+			banners = new Vector<>();
+			bannersURL = new Vector<>();
 			StringTokenizer st = new StringTokenizer(param, "|");
 			while( st.hasMoreTokens() )
 			    {
@@ -291,7 +291,7 @@ public class ScorchApplet extends Applet implements FocusListener
 
     public synchronized ScorchPlayer getPlayer(int num)
     {
-	return (ScorchPlayer)(players.elementAt(num));
+	return players.elementAt(num);
     }
 
     public synchronized ScorchPlayer getActivePlayer()
@@ -304,7 +304,7 @@ public class ScorchApplet extends Applet implements FocusListener
 	return players.size();
     }
 
-    public synchronized Vector getPlayers()
+    public synchronized Vector<ScorchPlayer> getPlayers()
     {
 	return players;
     }
@@ -350,9 +350,7 @@ public class ScorchApplet extends Applet implements FocusListener
     {
 	if( master )
 	    network.sendTankDead(id);
-	else 
-	    return;
-    }
+	}
     
     public synchronized void sendEOT()
     {
@@ -362,13 +360,13 @@ public class ScorchApplet extends Applet implements FocusListener
     public synchronized void sendEOT(String msg)           // made synchr 6/8/0
     {
 	// dts = desync test string
-	String dts = ""+rand.nextInt();
+	StringBuilder dts = new StringBuilder("" + rand.nextInt());
 
 	for(int i = 0; i < getPlayersNum(); i++)
-	    dts = dts + Protocol.separator + getPlayer(i).getPowerLimit();
+	    dts.append(Protocol.separator).append(getPlayer(i).getPowerLimit());
 
 	Debug.log("sendEOT(): "+msg+" "+Thread.currentThread());
-	network.sendEOT(dts);
+	network.sendEOT(dts.toString());
     }
 
     public void updateUser(PlayerProfile profile, boolean encrypt)
@@ -394,8 +392,8 @@ public class ScorchApplet extends Applet implements FocusListener
 		}
 	    catch(Exception e)
 		{
-		    String b[] = {"OK"};
-		    String c[] = {"Quit"};
+		    String[] b = {"OK"};
+		    String[] c = {"Quit"};
 		    MessageBox error = new MessageBox
 			("Error", 
 			 "Connection to the server failed", b, c, this);
@@ -464,11 +462,10 @@ public class ScorchApplet extends Applet implements FocusListener
 	    new GameOptions(myPlayer.getName()+" (master)", maxPlayers,
 			    myPlayer.getProfile(), this);
 	options.display();
-	playersList = (PlayersLister)options;
+	playersList = options;
 
 	network.sendMaxPlayers(maxPlayers);
-	for(int i = 0; i < aiplayers.length; i++)
-	    network.sendAIPlayer(aiplayers[i]);
+		for (String aiplayer : aiplayers) network.sendAIPlayer(aiplayer);
     }
 
     public synchronized void setGameOptions(PlayerProfile profile)
@@ -601,14 +598,13 @@ public class ScorchApplet extends Applet implements FocusListener
     {
 	String help = 
 	    "Hot keys:\nArrow keys : change power and angle setting with step 1\nCtrl : (with arrow keys) change power and angle with step 5\nPgUp/PgDn : change power with step 10\nHome/End : change angle with step 10\nSpace : Fire\nF1 : this reference window\nF2 : Statistics\nF3 : Edit profile\nF4 : Mass kill\nF5 : Inventory\nF10 : System menu\nTo chat during the game just start typing and chat window will popup.\n";
-	String b[] = {"OK, thanks", "Open manual"};
-	String c[] = {null, "showHelp"};
+	String[] b = {"OK, thanks", "Open manual"};
+	String[] c = {null, "showHelp"};
 	MessageBox ref = 
 	    new MessageBox("Quick Reference", help, b, c, Label.LEFT, this);
 
 	ref.display();
-	return;
-    }
+	}
     
     public synchronized void requestTopTen()
     {
@@ -626,7 +622,7 @@ public class ScorchApplet extends Applet implements FocusListener
 	    {
 		// first player is always me
 		myID = id;
-		players = new Vector(ScorchPlayer.MAX_PLAYERS);
+		players = new Vector<>(ScorchPlayer.MAX_PLAYERS);
 		master = (myID == 0);
 
 		if( Debug.dev )
@@ -687,8 +683,8 @@ public class ScorchApplet extends Applet implements FocusListener
 
     public synchronized void showDisconnect(String msg)
     {
-	String b[] = {"OK"};
-	String c[] = {"Quit"};
+	String[] b = {"OK"};
+	String[] c = {"Quit"};
 	MessageBox error = new MessageBox("Message", msg, b, c, this);
 	network.quit();
 	this.removeAll();
@@ -709,9 +705,9 @@ public class ScorchApplet extends Applet implements FocusListener
     // the same applies to the recieveMassKill()
     public void playerLeft(int ID)
     {
-	ScorchPlayer sp = getPlayerByID(ID);;
-	
-	if( sp == null )
+	ScorchPlayer sp = getPlayerByID(ID);
+
+		if( sp == null )
 	    {
 		System.err.println("ScorchApplet.playerLeft(): Player "+ID+
 				   " not found");
@@ -740,9 +736,9 @@ public class ScorchApplet extends Applet implements FocusListener
     
     public synchronized void errorLogin(String name, String reason)
     {
-	String b[] = {"Retry", "Cancel"};
-	String cb[] = {"loginWindow", "Quit"};
-	String args[] = {name, null};
+	String[] b = {"Retry", "Cancel"};
+	String[] cb = {"loginWindow", "Quit"};
+	String[] args = {name, null};
 	MessageBox mb;
 	String message = "Login failed for unknow reason";
 
@@ -789,7 +785,7 @@ public class ScorchApplet extends Applet implements FocusListener
 	getAppletContext().showDocument(helpURL,"Scorched Earth 2000 Help");
     }
 
-    public synchronized void showTopTen(Vector profiles)
+    public synchronized void showTopTen(Vector<?> profiles)
     {
 	StatsWindow sw = new StatsWindow(StatsWindow.TT, profiles, this);
 	sw.display();
@@ -868,8 +864,8 @@ public class ScorchApplet extends Applet implements FocusListener
 	    {
 		Random r = new Random();
 		int bNum = Math.abs(r.nextInt() % banners.size());
-		(new BannerWindow(this, (String)banners.elementAt(bNum),
-				  (String)bannersURL.elementAt(bNum))).display();
+		(new BannerWindow(this, banners.elementAt(bNum),
+				bannersURL.elementAt(bNum))).display();
 	    }
 
 	scorch.newSysMsg("Round #"+(++roundCount)+" out of "+getMaxRounds() );
@@ -879,7 +875,7 @@ public class ScorchApplet extends Applet implements FocusListener
     {
 	for(int i = 0; i < getPlayersNum(); i++)
 	    {
-		ScorchPlayer sp = ((ScorchPlayer)players.elementAt(i));
+		ScorchPlayer sp = players.elementAt(i);
 		if( sp instanceof AIPlayer )
 		    ((AIPlayer)sp).buyAmmunition();
 	    }
@@ -979,7 +975,7 @@ public class ScorchApplet extends Applet implements FocusListener
 	rand = new Random(seed); //seed
 	
 	for(int i = 0; i < getPlayersNum(); i++)
-	    ((ScorchPlayer)players.elementAt(i)).setRand(rand);
+	    players.elementAt(i).setRand(rand);
 
 	Physics.setGravity(gameSettings.gravity);
 

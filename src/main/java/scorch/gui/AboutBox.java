@@ -15,7 +15,7 @@ import swindows.*;
 
 public class AboutBox extends sWindow implements ActionListener
 {
-    private CreditsPanel cp;
+    private final CreditsPanel cp;
 
     public AboutBox(ScorchApplet owner)
     {
@@ -70,7 +70,7 @@ public class AboutBox extends sWindow implements ActionListener
 
 class CreditsPanel extends sPanel implements Runnable
 {
-    private String[] credits = 
+    private final String[] credits =
     {"Scorched Earth 2000",ScorchApplet.Version+"","by KAOS Software Team","",
      "Project Lead","Hei C. Ng (xixi)","",
      "Development Lead", "Alexander Rasin", "",
@@ -89,7 +89,7 @@ class CreditsPanel extends sPanel implements Runnable
      "dkw for protecting our files", ""
     };
 
-    private Color[] colors = {Color.yellow, Color.white, Color.cyan, 
+    private final Color[] colors = {Color.yellow, Color.white, Color.cyan,
 			      Color.cyan,
 			      Color.cyan, Color.lightGray, 
 			      Color.cyan, Color.cyan,
@@ -109,8 +109,7 @@ class CreditsPanel extends sPanel implements Runnable
     };
 
     private int scroller = 0;
-    private Thread thread;
-    private Image backBuffer;
+	private Image backBuffer;
     private Graphics backBufferG;
 
     public CreditsPanel()
@@ -118,9 +117,9 @@ class CreditsPanel extends sPanel implements Runnable
 	super(0,0,0,0);
 
 	int w = 0;
-	for(int i = 0; i < credits.length; i++)
-	    if( w < fm.stringWidth(credits[i]) )
-		w = (int)(1.8*(double)fm.stringWidth(credits[i]));
+		for (String credit : credits)
+			if (w < fm.stringWidth(credit))
+				w = (int) (1.8 * (double) fm.stringWidth(credit));
 	
 	height=width = w;
 	setSize(width, height);
@@ -153,7 +152,7 @@ class CreditsPanel extends sPanel implements Runnable
 
     public void startScroll()
     {
-	thread = new Thread(this, "aboutbox-thread");
+		Thread thread = new Thread(this, "aboutbox-thread");
 	thread.start();
     }
 
@@ -199,7 +198,7 @@ class CreditsPanel extends sPanel implements Runnable
 		
 		try
 		    {
-			thread.sleep(100);
+			Thread.sleep(100);
 		    }
 		catch(InterruptedException e)
 		    {

@@ -11,14 +11,12 @@ package scorch.weapons;
   explode the missile upon collision
 */
 
-import java.awt.*;
-
 import scorch.*;
 	            
 public class RoundMissile extends GenericMissile
 {
     // Missile sprite
-    private final static int data[][]=
+    private final static int[][] data =
     {
 	{0,b,b,0},
 	{b,b,w,b},

@@ -12,20 +12,18 @@ import ScorchServer.ScorchServer;
 
 public class ServerShell implements Runnable
 {
-    private static String prompt = "ServerShell-> ";
-    private static String separators = " ";
-    private Class argType[] = new Class[2];
+    private final Class<?>[] argType = new Class[2];
 
-    private String commandNames[] = { "lg", "boot", "help", "say", "whois",
+    private final String[] commandNames = { "lg", "boot", "help", "say", "whois",
 				      "desync", "passwd", "shout", "addkg",
 				      "shutdown"};
-    private String commandHelp[] = new String[commandNames.length];
-    private Hashtable commandsHash = new Hashtable(),
-	classHash = null;//new Hashtable();
+    private final String[] commandHelp = new String[commandNames.length];
+    private final Hashtable<String,Method> commandsHash = new Hashtable<>();
+	//private final Hashtable classHash = null;//new Hashtable();
 
     private ScorchServer owner = null;
-    private BufferedReader in = null;
-    private PrintWriter out = null;
+    private final BufferedReader in;
+    private final PrintWriter out;
     private Socket socket = null;
     
     
@@ -66,12 +64,13 @@ public class ServerShell implements Runnable
     {
 	Object[] args = new Object[2];
 	String command = null;
-	Vector v = new Vector();
-	Method commandMethod = null;
+	Vector<String> v = new Vector<>();
+	Method commandMethod;
 
 	if (cmd == null) return true;
 
-	StringTokenizer st = new StringTokenizer(cmd, separators);
+        String separators = " ";
+        StringTokenizer st = new StringTokenizer(cmd, separators);
 	
 	if (st.hasMoreTokens())
 	    command = st.nextToken();
@@ -89,7 +88,7 @@ public class ServerShell implements Runnable
 	args[0] = v;
 	args[1] = this;
 
-	commandMethod = (Method)commandsHash.get(command);
+	commandMethod = commandsHash.get(command);
 
 	try
 	    {
@@ -108,7 +107,7 @@ public class ServerShell implements Runnable
 
     private void loadCommands()
     {	
-	Class commandClass;
+	Class<?> commandClass;
 	try {
 	    argType[0] = Class.forName("java.util.Vector");
 	    argType[1] = Class.forName("java.lang.Object");
@@ -128,8 +127,8 @@ public class ServerShell implements Runnable
 			commandClass = Class.forName
 			    ("ScorchServer.ServerShell.commands."
 			     +commandNames[i]);
-			commandHelp[i] = commandNames[i] + "\t\t" + 
-			    (String)commandClass.getField("help").get(null)
+			commandHelp[i] = commandNames[i] + "\t\t" +
+                    commandClass.getField("help").get(null)
 			    +"\n";
 			commandsHash.put(commandNames[i], 
 					 commandClass.getMethod
@@ -155,8 +154,9 @@ public class ServerShell implements Runnable
     {
 	//load the available commands into the hashtable
 	loadCommands();
-	
-	print(prompt);
+
+        String prompt = "ServerShell-> ";
+        print(prompt);
 	try {
 	    
 	    while ( this.executeCommand( in.readLine() ) )

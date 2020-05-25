@@ -16,10 +16,10 @@ public class passwd extends shellCommand
     public static String help = "To reset a password for a user.";
 
     //arguments are ignored here for now.
-    public static void run(Vector args, Object owner)
+    public static void run(Vector<String> args, Object owner)
     {
 	ServerShell shell = (ServerShell)owner;
-	String password = "";
+	StringBuilder password = new StringBuilder();
 
 	if ( args.size() == 0 )
 	    {
@@ -30,18 +30,18 @@ public class passwd extends shellCommand
 	try
 	    {
 		p = ScorchServer.findProfileByName
-		    ((String)args.elementAt(0));
+		    (args.elementAt(0));
 		
 		for (int i = 1; i < args.size(); i++)
-		    password = password + args.elementAt(i);
+		    password.append(args.elementAt(i));
 		
 		if (p == null)
-		    shell.println("Player " + (String)args.elementAt(0)
+		    shell.println("Player " + args.elementAt(0)
 				  +" does not exist.\n");
 		else
 		    {
 			System.out.println("Password-" + password+ "-");
-			p.setPassword(password);
+			p.setPassword(password.toString());
 			p.encrypt();
 			ScorchServer.changeProfile(p);
 		    }

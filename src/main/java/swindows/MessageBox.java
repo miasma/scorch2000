@@ -15,10 +15,11 @@ import java.util.*;
 
 public class MessageBox extends sWindow implements ActionListener
 {
-    protected String[] buttons, callbacks;
-    protected Object[] args;
+    protected final String[] buttons;
+	protected final String[] callbacks;
+    protected final Object[] args;
     protected Container peer;
-    protected int textAlign = Label.CENTER;
+    protected final int textAlign;
 
     public MessageBox(String title, String message, 
 		      String[] buttons, String[] callbacks, 
@@ -34,7 +35,7 @@ public class MessageBox extends sWindow implements ActionListener
 		      String[] buttons, String[] callbacks, 
 		      Container owner)
     {
-	this(title, message, buttons, callbacks, (Object[])null, 
+	this(title, message, buttons, callbacks, null,
 	     Label.CENTER, owner);
     }
 
@@ -43,7 +44,7 @@ public class MessageBox extends sWindow implements ActionListener
 		      int textAlign,
 		      Container owner)
     {
-	this(title, message, buttons, callbacks, (Object[])null, 
+	this(title, message, buttons, callbacks, null,
 	     textAlign, owner);
     }
 
@@ -68,13 +69,12 @@ public class MessageBox extends sWindow implements ActionListener
 
 	Panel pb = new Panel();
 	pb.setLayout(new FlowLayout(FlowLayout.CENTER));
-	
-	for(int i = 0; i < buttons.length; i++)
-	    {
-		Button tb = new Button(buttons[i]);
-		pb.add(tb);
-		tb.addActionListener(this);
-	    }
+
+		for (String button : buttons) {
+			Button tb = new Button(button);
+			pb.add(tb);
+			tb.addActionListener(this);
+		}
 
 	/* build the text (multiline) panel */
 	Panel pl = new Panel();
@@ -105,7 +105,7 @@ public class MessageBox extends sWindow implements ActionListener
 
     public void actionPerformed(ActionEvent evt)
     {
-	Method m = null;
+	Method m;
 	String cmd = evt.getActionCommand();
 
 	if( peer != null )
@@ -124,7 +124,7 @@ public class MessageBox extends sWindow implements ActionListener
 			if( callbacks[i] == null ) return;
 			try
 			    {
-				Class[] type;
+				Class<?>[] type;
 				Object[] arg;
 				if( args == null || args[i] == null)
 				    {
@@ -150,6 +150,5 @@ public class MessageBox extends sWindow implements ActionListener
 			return;
 		    }
 	    }
-	return;
-    }
+	}
 }

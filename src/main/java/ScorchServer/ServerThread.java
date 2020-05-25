@@ -30,7 +30,6 @@ public class ServerThread extends Player implements Runnable
     //input and output streams
     private BufferedReader in = null;
     private PrintWriter out = null;
-    private Thread self;
     private long pingtime, pongtime;
     private final static long PONGTIMEOUT = 60*1000;
     private final static long PINGTIME = 20*1000;
@@ -43,7 +42,7 @@ public class ServerThread extends Player implements Runnable
     {
 	this.socket = socket;
 	pingtime = pongtime = System.currentTimeMillis();
-	self = new Thread(this);
+        Thread self = new Thread(this);
 	self.start();
     }
     
@@ -115,9 +114,8 @@ public class ServerThread extends Player implements Runnable
 		//the thread is already disconnected
 		if (!keep_running)
 		    return null;
-		
-		String msg = in.readLine();
-		return msg;
+
+			return in.readLine();
 	    }
 	catch (Exception e)
 	    {
@@ -348,7 +346,7 @@ public class ServerThread extends Player implements Runnable
 		    }
 		if (command.equals(Protocol.jvminfo))
 		    {
-			jvm = st.nextToken().toString();
+			jvm = st.nextToken();
 			continue;
 		    }
 		//memorize game options (send them then the game starts)
@@ -403,7 +401,7 @@ public class ServerThread extends Player implements Runnable
 		    {
 			int plid = Integer.parseInt(st.nextToken());
 			String said = st.nextToken();
-			Player p = null;
+			Player p;
 			
 			p = myGame.findPlayerByID(plid);
 			if (p != null) 
@@ -427,8 +425,8 @@ public class ServerThread extends Player implements Runnable
 			//that goes in front of string msg
 
 			profile = new PlayerProfile 
-			   (msg.substring(Protocol.changeprofile.length() + 1, 
-					  msg.length()));
+			   (msg.substring(Protocol.changeprofile.length() + 1
+			   ));
 
 			if (profile.getPassword().equals("*"))
 			    profile.setPassword(password);

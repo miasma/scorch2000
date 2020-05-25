@@ -18,16 +18,23 @@ import swindows.*;
 
 public class MainToolbar extends sWindow 
 {
-    private Label power, angle, ammo;
-    private PlayersListControl pl;
-    private Button up, down, left, right, fire;
-    private Button inventory, system;
-    private Choice weapon;
-    private ScorchPlayer myPlayer;
-    private SystemMenu sMenu;
+    private final Label power;
+	private final Label angle;
+	private final Label ammo;
+    private final PlayersListControl pl;
+    private final Button up;
+	private final Button down;
+	private final Button left;
+	private final Button right;
+	private final Button fire;
+    private final Button inventory;
+	private final Button system;
+    private final Choice weapon;
+    private final ScorchPlayer myPlayer;
+    private final SystemMenu sMenu;
     private Inventory wndInventory;
 
-    public MainToolbar(Vector players, ScorchApplet owner)
+    public MainToolbar(Vector<ScorchPlayer> players, ScorchApplet owner)
     {
 	super(owner.getGameWidth(), 0,
 	      owner.getWidth()-owner.getGameWidth(), owner.getHeight(),
@@ -37,7 +44,7 @@ public class MainToolbar extends sWindow
 
 	//addKeyListener(this);
 
-	sMenu = new SystemMenu((ScorchApplet)owner);
+	sMenu = new SystemMenu(owner);
 
 	GridBagLayout layout = new GridBagLayout();
 	GridBagConstraints constraints;
@@ -77,12 +84,11 @@ public class MainToolbar extends sWindow
 	
 	Weapon[] weapons = myPlayer.getWeapons();
 	Weapon w;
-	for(int i = 0; i < weapons.length; i++)
-	    {
-		w = weapons[i];
-		if( w.getQuantity() > 0 )
-		    weapon.addItem(w.getName());
-	    }
+		for (Weapon value : weapons) {
+			w = value;
+			if (w.getQuantity() > 0)
+				weapon.addItem(w.getName());
+		}
 
 	add(weapon);
 	constraints = makeConstraints
@@ -310,9 +316,9 @@ public class MainToolbar extends sWindow
     public boolean handleEvent(Event evt)
     {
 	if( !isEnabled() )
-	    return super.handleEvent(evt);;
+	    return super.handleEvent(evt);
 
-	if( evt.id == Event.KEY_PRESS && 
+		if( evt.id == Event.KEY_PRESS &&
 	    ((evt.key >= 'A' && evt.key <= 'Z') || 
 	     (evt.key >= 'a' && evt.key <= 'z') ||
 	     (evt.key >= '!' && evt.key <= '@') ) )
@@ -419,8 +425,8 @@ public class MainToolbar extends sWindow
 
 			if( ((ScorchApplet)owner).isMaster() )
 			    {
-				String b[] = {"Yes", "Cancel"};
-				String c[] = {"massKill", null};
+				String[] b = {"Yes", "Cancel"};
+				String[] c = {"massKill", null};
 				msg = new MessageBox
 				    ("Confirmation", 
 				     "Are you sure you want to kill everybody and start a new round?",
@@ -428,8 +434,8 @@ public class MainToolbar extends sWindow
 			    }
 			else
 			     {
-				String b[] = {"OK"};
-				String c[] = {null};
+				String[] b = {"OK"};
+				String[] c = {null};
 				msg = new MessageBox
 				    ("Message", 
 				     "You have to be the master of the game to masskill",
@@ -459,8 +465,8 @@ public class MainToolbar extends sWindow
 			else
 			    {
 				MessageBox msg;
-				String b[] = {"OK"};
-				String c[] = {null};
+				String[] b = {"OK"};
+				String[] c = {null};
 				msg = new MessageBox
 				    ("Message", 
 				     "You have to be the master of the game to boot players",

@@ -17,9 +17,9 @@ import swindows.*;
 
 public class ChatBox extends sWindow implements ActionListener, KeyListener
 {
-    private TextField message;
-    private char ch;
-    private Choice rcpt;
+    private final TextField message;
+    private final char ch;
+    private final Choice rcpt;
 
     private static final String BROADCAST = "Everybody";
 
@@ -32,9 +32,9 @@ public class ChatBox extends sWindow implements ActionListener, KeyListener
 	rcpt = new Choice();
 	rcpt.addKeyListener(this);
 	rcpt.add(BROADCAST);
-	Vector plrs = owner.getPlayers();
+	Vector<ScorchPlayer> plrs = owner.getPlayers();
 	for(int i = 0; i < plrs.size(); i++)
-	    rcpt.addItem(((ScorchPlayer)plrs.elementAt(i)).getName());
+	    rcpt.addItem(plrs.elementAt(i).getName());
 
 	Panel pb = new Panel();
 
@@ -92,8 +92,7 @@ public class ChatBox extends sWindow implements ActionListener, KeyListener
 	if( "Cancel".equals(cmd) )
 	    {
 		closeChat(false);
-		return;
-	    }
+        }
     }
 
     void closeChat(boolean say)

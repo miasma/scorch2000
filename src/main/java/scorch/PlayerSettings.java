@@ -8,8 +8,8 @@ package scorch;
 
 public class PlayerSettings
 {
-    public int tankType;
-    public boolean sounds;
+    public final int tankType;
+    public final boolean sounds;
 
     public PlayerSettings(int tt, boolean s)
     {

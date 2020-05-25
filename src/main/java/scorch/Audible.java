@@ -15,30 +15,30 @@ import scorch.utility.*;
 
 public abstract class Audible
 {
-    protected static Vector sounds;
+    protected static Vector<AudioClip> sounds;
 
     protected void startSound(int index)
     {
 	if( sounds != null && sounds.size() > index && ScorchApplet.sounds )
-	    ((AudioClip)sounds.elementAt(index)).play();
+	    sounds.elementAt(index).play();
     }
 
     protected void loopSound(int index)
     {
 	if( sounds != null && sounds.size() > index )
-	    ((AudioClip)sounds.elementAt(index)).loop();
+	    sounds.elementAt(index).loop();
     }
 
     protected void stopSound(int index)
     {
 	if( sounds != null && sounds.size() > index )
-	    ((AudioClip)sounds.elementAt(index)).stop();
+	    sounds.elementAt(index).stop();
     }
 
     protected static int addSound(AudioClip sound)
     {
 	if( sounds == null )
-	    sounds = new Vector();
+	    sounds = new Vector<>();
 	sounds.addElement(sound);
       
 	return sounds.indexOf(sound);

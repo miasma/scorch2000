@@ -7,8 +7,6 @@ package scorch.weapons;
   Description: the simple roller weapon
 */
 
-import scorch.Bitmap;
-
 public class Roller extends Weapon
 {
     public Roller()

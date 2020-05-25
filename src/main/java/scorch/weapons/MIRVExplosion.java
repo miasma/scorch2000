@@ -7,7 +7,6 @@ package scorch.weapons;
 */
 
 import java.util.*;
-import java.awt.*;
 
 import scorch.*;
 
@@ -43,7 +42,7 @@ public class MIRVExplosion extends ParticlesExplosion implements Directional
 
     protected void initParticles()
     {
-	double power = speed-offset*enumber/2;
+	double power = speed-offset*enumber/2.0;
 	GenericMissile msl;
 
 	for(int i = 0; i < enumber; i++)

@@ -9,7 +9,6 @@ package scorch.items;
 */
 
 import java.awt.*;
-import java.awt.event.*;
 
 import scorch.ScorchApplet;
 

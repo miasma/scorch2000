@@ -10,7 +10,7 @@
 
     <properties>
         <project.mainclass>scorch.ScorchMain</project.mainclass>
-        <jdk.version>11</jdk.version>
+        <jdk.version>8</jdk.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <jqwik.version>1.2.0</jqwik.version>
         <junit.version>5.5.2</junit.version>

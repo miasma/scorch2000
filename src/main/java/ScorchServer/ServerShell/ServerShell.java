@@ -12,7 +12,7 @@ import ScorchServer.ScorchServer;
 import ScorchServer.ServerShell.commands.*;
 
 public class ServerShell implements Runnable {
-    public final List<shellCommand> commands = List.of(
+    public final List<shellCommand> commands = Arrays.asList(
             new addkg(),
             new boot(),
             new desync(),

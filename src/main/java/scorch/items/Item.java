@@ -23,7 +23,7 @@ public abstract class Item {
     };
 
     static java.util.List<Item> generateItems() {
-        return java.util.List.of(
+        return Arrays.asList(
                 new Shield(),
                 new MediumShield(),
                 new HeavyShield(),

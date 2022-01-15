@@ -10,6 +10,7 @@ package scorch.weapons;
 
 import java.awt.*;
 import java.awt.event.*;
+import java.util.Arrays;
 import java.util.Random;
 import java.util.function.Supplier;
 
@@ -35,7 +36,7 @@ public abstract class Weapon extends Item {
     };
 
     static java.util.List<Weapon> generateWeapons() {
-        return java.util.List.of(
+        return Arrays.asList(
                 new Missile(),
                 new BabyNuke(),
                 new Nuke(),
